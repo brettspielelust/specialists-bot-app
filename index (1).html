@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRGT Bot-App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --border-radius: 8px;
+            --button-bg: #e0e0e0;
+            --button-hover: #d0d0d0;
+            --highlight-color: #4CAF50;
+            --info-color: #2196F3;
+        }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { margin-bottom: 5px; }
+        .sub-line {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        button {
+            background-color: var(--button-bg);
+            border: 1px solid #ccc;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.1s;
+        }
+        button:hover:not(:disabled) { background-color: var(--button-hover); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: white;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px top 50%;
+            background-size: 12px auto;
+            padding: 10px;
+            margin: 5px 0 15px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .hidden { display: none !important; }
+        
+        .info-icon {
+            color: var(--info-color);
+            cursor: pointer;
+            font-size: 16px;
+            vertical-align: middle;
+        }
+
+        .header-image {
+            width: calc(100% + 40px);
+            max-width: none;
+            height: auto;
+            max-height: 200px;
+            display: block;
+            margin: -20px -20px 20px -20px;
+            border-radius: 0;
+            object-fit: cover;
+        }
+
+        #setup-view {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #dashboard-view {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .accordion {
+            background-color: #f9f9f9;
+            color: #333;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: 1px solid #ddd;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .accordion:hover { background-color: #eef2f5; }
+        .accordion.active {
+            border-radius: 4px 4px 0 0;
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .accordion-content {
+            padding: 0 15px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            border-radius: 0 0 4px 4px;
+            border: 1px solid #ddd;
+            border-top: none;
+            margin-bottom: 15px;
+        }
+        .accordion-content.active {
+            border-top: 1px solid #eee;
+        }
+        .accordion-content p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #444;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .team-setup {
+            border-top: 2px solid #eee;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .instruction-text {
+            text-align: center;
+            color: #555;
+            font-size: 15px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .rider-nav-bar {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .nav-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .nav-btn {
+            background: white;
+            border: 2px solid transparent;
+            border-radius: var(--border-radius);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-weight: bold;
+            color: #444;
+            transition: all 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .nav-btn.active {
+            border-color: var(--highlight-color);
+            background: #f0fdf4;
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .nav-btn i.ready-icon {
+            color: #4CAF50;
+            font-size: 18px;
+            margin-left: auto;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-left: 12px solid gray;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .rider {
+            background: transparent;
+            border: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-display {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 15px 0;
+            min-height: 300px;
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 4px;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #ccc;
+        }
+        .card-img {
+            width: 100%;
+            max-width: 280px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            border: 5px solid transparent;
+            transition: transform 0.2s;
+        }
+        .card-img.selected { border-color: var(--highlight-color); transform: scale(1.02); }
+        .card-img.unselected { opacity: 0.4; filter: grayscale(100%); }
+        
+        .stats { font-size: 13px; color: #777; text-transform: uppercase; }
+        .clickable-stat { color: var(--info-color); text-decoration: underline; cursor: pointer; font-weight: bold; }
+        
+        .action-area {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            margin-top: auto;
+        }
+        .action-row-top, .action-row-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .draw-controls { display: flex; gap: 5px; }
+        .exh-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-left: auto;
+        }
+        .exh-controls {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #ffebee;
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: 1px solid #ffcdd2;
+        }
+        .exh-controls button {
+            padding: 5px 10px;
+            margin: 0;
+            background: white;
+            border-color: #ffcdd2;
+            font-weight: bold;
+        }
+        .btn-done {
+            background-color: var(--highlight-color);
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            margin-left: auto;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            font-size: 15px;
+        }
+        .checkbox-label input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .exh-phase-panel {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            border: 2px solid #FF9800;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .exh-phase-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .exh-phase-row:last-child { border-bottom: none; }
+        .exh-phase-row-label {
+            font-weight: bold;
+            padding-left: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            overflow-y: auto;
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            width: 85%;
+            max-width: 380px;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            right: 15px; top: 10px;
+            font-size: 28px; font-weight: bold; cursor: pointer; color: #aaa;
+        }
+
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
+        .toast {
+            background: #333; color: white; padding: 12px 20px;
+            border-radius: 4px; margin-top: 10px; animation: toast-in 0.3s forwards;
+        }
+        @keyframes toast-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .bottom-controls { margin-top: 30px; display: flex; flex-direction: column; gap: 15px; }
+        .btn-primary {
+            background: var(--highlight-color); color: white;
+            font-size: 20px; font-weight: bold; padding: 20px; border: none; border-radius: 4px;
+        }
+        .btn-primary:disabled {
+            background: #bdbdbd;
+            color: #757575;
+            opacity: 1;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<div class="container">
+    <div id="setup-view">
+        <img src="assets/header.webp" alt="Specialist Riders App Header" class="header-image" onerror="this.style.display='none'">
+        
+        <div class="sub-line">
+            Unofficial Flamme Rouge App to play a Single Race or Grand Tour with Specialist Riders (Bots).
+        </div>
+        
+        <label>Race Mode <i class="bi bi-info-circle info-icon" style="margin-left:8px;" onclick="showHelp('raceMode')"></i></label>
+        <select id="raceMode">
+            <option value="" disabled selected></option>
+            <option value="single">Single Race</option>
+            <option value="grand_tour">Grand Tour</option>
+        </select>
+
+        <label>Number of Bot Teams <i class="bi bi-info-circle info-icon" style="margin-left:8px;" onclick="showHelp('botTeams')"></i></label>
+        <select id="teamCount">
+            <option value="" disabled selected></option>
+            <option value="1">1</option><option value="2">2</option>
+            <option value="3">3</option><option value="4">4</option><option value="5">5</option>
+        </select>
+
+        <div id="teams-container"></div>
+
+        <div id="setup-error" style="color: #d32f2f; font-weight: bold; margin-bottom: 0px; text-align: center; min-height: 20px;"></div>
+        
+        <button id="btn-start" style="width: 100%; background: #4CAF50; color: white; padding: 15px; font-weight: bold; border: none; font-size: 16px;">START RACE</button>
+        <button id="btn-resume" class="hidden" style="width: 100%; background: #2196F3; color: white; padding: 15px; margin-top: 10px; border: none; font-weight: bold;">RESUME SAVED GAME</button>
+        
+        <div style="margin-top: 30px;"></div>
+        
+        <button type="button" class="accordion" onclick="toggleAccordion(this)">
+            About this project <i class="bi bi-chevron-down"></i>
+        </button>
+        <div class="accordion-content">
+            <p>This web app is based on a fan-made <a href="https://boardgamegeek.com/filepage/288985/flamme-rouge-grand-tour-solo-rules" target="_blank" style="color: #2196F3;">solo version published on BoardGameGeek</a> by Fredrik Stahre. Fredrik's aim was to make the Flamme Rouge Bots use all the new rules included in the Grand Tour expansion (specialist powers).</p>
+            <p>Since playing this solo variant requires printing and cutting out a lot of cards, taking up table space and adding administrative overhead, I developed this app. It digitally simulates the drawing and playing of Energy Cards for Specialist Riders (Bots), allowing you to compete against up to five teams. In addition to a Single Race, you can play a Grand Tour (where half of each Bot's Exhaustion Cards are carried over to the next stage).</p>
+            <p><strong>Please note:</strong> This app uses your browser's local storage so you can resume your game later (no login is required, and no data is saved to external databases!). The code for this app is licensed under Creative Commons and is available on GitHub. Feel free to adopt or enhance this project.</p>
+            <p><em>Disclaimer: I am not commercially associated with the game's author or publisher.</em></p>
+            <p>App author:<br>
+            Oliver Baentsch<br>
+            <a href="https://www.brettspielelust.de" target="_blank" style="color: #2196F3;">Brettspielelust</a><br>
+            oliver [at] brettspielelust.de</p>
+        </div>
+        
+        <button type="button" class="accordion" onclick="toggleAccordion(this)">
+            How to use this app <i class="bi bi-chevron-down"></i>
+        </button>
+        <div class="accordion-content">
+            <p>On the setup screen, choose whether you want to ride a Single Race or embark on a multi-stage Grand Tour.</p>
+            <p>Next, select the number of competing Bot Teams. Assign a color to each team and recruit their Specialist Riders. Every team must consist of exactly one Rouleur and one Sprinteur. You may recruit the same Specialist type across multiple teams.</p>
+            <p>Click <strong>"START RACE"</strong> to begin the first round.</p>
+            <p>During the race, select a Rider in turn order (starting from the front of the peloton) to open their action panel. Click <strong>"Draw Card"</strong> to reveal their Energy Card, and decide if a second card is required according to the rules.</p>
+            <p>Resolve all Bots in turn order. At the end of the round, distribute Exhaustion Cards to the affected Riders before proceeding to the next round.</p>
+        </div>
+
+        <button type="button" class="accordion" onclick="toggleAccordion(this)">
+            Version 1.0.2 | Changelog <i class="bi bi-chevron-down"></i>
+        </button>
+        <div class="accordion-content">
+            <div style="color: #333; margin-top: 15px; font-weight: bold;">April 19th, 2026</div>
+            <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
+                <li>Bugfix: Escaped HTML tags in the changelog text that previously broke the DOM parser and prevented Javascript (like the Modals) from executing.</li>
+                <li>Dashboard Layout Update: Constrained the dashboard view to a maximum width of 600px to perfectly match the boxed desktop layout of the setup screen.</li>
+                <li>UI Restructuring: Rearranged the start page layout, moving accordions below the Start button and merging the Changelog into the third accordion.</li>
+            </ul>
+            <div style="color: #333; margin-bottom: 5px; font-weight: bold;">April 18th, 2026</div>
+            <ul style="margin-top: 0; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
+                <li>Sequential Wizard Flow: Replaced the scrolling dashboard with a focused, one-rider-at-a-time view. Navigation buttons are now auto-sorted by role.</li>
+                <li>End-of-Round Exhaustion: Added a centralized panel at the end of the round to distribute Exhaustion Cards efficiently all at once.</li>
+                <li>"Race Finished" Option: Added a checkbox for riders who cross the finish line, excluding them from future rounds and marking them with a flag icon.</li>
+            </ul>
+            <div style="color: #333; margin-bottom: 5px; font-weight: bold;">April 17th, 2026</div>
+            <ul style="margin-top: 0; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
+                <li>Inline Setup Validation: Replaced intrusive browser alert pop-ups with clean, inline error messages during team setup.</li>
+                <li>Responsive UI: The header image now scales correctly on mobile devices, and all info modals close reliably when clicking the dark background.</li>
+                <li>In-App Help System: Integrated clickable info icons next to key elements and added an expandable "How to use" accordion on the start screen.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="dashboard-view" class="hidden">
+        <div class="top-bar">
+            <h2 id="round-display" style="margin: 0; font-size: 28px;">Round 1</h2>
+            <div id="mode-display" style="font-size: 14px; color: #666; margin-top: 5px;"></div>
+        </div>
+        
+        <div class="instruction-text">Choose Rider to draw their Energy Card(s), starting with the frontmost Rider.</div>
+        <div id="rider-nav" class="rider-nav-bar"></div>
+        <div id="game-board"></div>
+        
+        <div class="bottom-controls">
+            <button id="btn-next-turn" class="btn-primary"></button>
+            <div style="display:flex; gap:10px;">
+                <button id="btn-end-stage" style="flex:1; background:#FF9800; color:white; border:none; padding:15px; font-weight:bold; border-radius:4px;">End Stage</button>
+                <button id="btn-reset" style="flex:1; background:#F44336; color:white; border:none; padding:15px; font-weight:bold; border-radius:4px;">Reset Game</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="discard-modal" class="modal" onclick="if(event.target === this) closeModal('discard-modal')">
+    <div class="modal-content"><span class="close-modal" onclick="closeModal('discard-modal')">&times;</span><h2 id="modal-title"></h2><div id="modal-list" style="display:flex; flex-direction:column; gap:10px; align-items:center;"></div></div>
+</div>
+
+<div id="help-modal" class="modal" onclick="if(event.target === this) closeModal('help-modal')">
+    <div class="modal-content"><span class="close-modal" onclick="closeModal('help-modal')">&times;</span><h2 id="help-title" style="margin-top: 0;">Help</h2><div id="help-text" style="line-height:1.6; font-size: 15px; color: #444;"></div></div>
+</div>
+
+<script>
+    const roles = {
+        'Squirrel (Sprinteur)': 'squirrel',
+        'Domestike (Rouleur)': 'domestike',
+        'Baroudeur (Rouleur)': 'baroudeur',
+        'Flandrien (Rouleur)': 'flandrien',
+        'Polyvalent (Sprinteur)': 'polyvalent',
+        'Descender (Sprinteur)': 'descender'
+    };
+    
+    const helpTexts = {
+        'raceMode': {
+            title: 'Race Mode',
+            text: 'Choose the kind of race you like to start. A Single Race resets everything after the finish. A Grand Tour keeps half of your Exhaustion Cards for the next stage.'
+        },
+        'botTeams': {
+            title: 'Number of Bot Teams',
+            text: 'Select how many independent Bot teams (2 riders each) you want to manage in this race.'
+        },
+        'riderInfo': {
+            title: 'How to play this Rider',
+            text: '<p>Click <strong>"Draw Card"</strong> to reveal an Energy Card from the Rider\'s Deck. Then decide, according to the rules, if a second card is needed (Click <strong>"+ 2nd Card?"</strong>). You will now see both cards. Choose and click the first or second card. Move the Rider on the track according to their Movement Points.</p><p>Afterwards, click <strong>"Done"</strong> to close this panel and select the next Rider in turn order. Did this Rider cross the finish line this round? If so, check the <strong>"Race finished?"</strong> box so they are excluded from future rounds.</p>'
+        },
+        'exhaustion': {
+            title: 'Exhaustion Management',
+            text: '<p>After playing an Energy Card, a Rider may discard one Exhaustion Card from the game. You can adjust the total number of Exhaustion Cards manually by pressing <strong>(+/-)</strong>.</p><p>Attention: There is no need to manually add Exhaustion Cards for Riders who become exhausted at the end of the movement phase; you will be prompted to distribute those at the very end of the round.</p>'
+        }
+    };
+
+    const colors = ['White', 'Black', 'Blue', 'Green', 'Pink', 'Red'];
+    let state = { mode: 'single', round: 1, teams: [] };
+    let currentTeamIdx = -1;
+    let currentRiderIdx = -1;
+
+    function toggleAccordion(el) {
+        el.classList.toggle("active");
+        const icon = el.querySelector('i');
+        if (icon.classList.contains('bi-chevron-down')) {
+            icon.classList.replace('bi-chevron-down', 'bi-chevron-up');
+        } else {
+            icon.classList.replace('bi-chevron-up', 'bi-chevron-down');
+        }
+        
+        const content = el.nextElementSibling;
+        if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+            content.classList.remove('active');
+            setTimeout(() => content.style.border = "none", 200);
+        } else {
+            content.style.border = "1px solid #ddd";
+            content.style.borderTop = "none";
+            content.classList.add('active');
+            content.style.maxHeight = content.scrollHeight + "px";
+        }
+    }
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function buildDeck(roleKey) {
+        const deck = [];
+        const roleFile = roles[roleKey];
+        for (let i = 1; i <= 15; i++) {
+            deck.push(`assets/${roleFile}_${i.toString().padStart(2, '0')}.webp`);
+        }
+        return shuffle(deck);
+    }
+
+    function getExhPath(roleKey) { return `assets/${roles[roleKey]}_exhaustion.webp`; }
+
+    function save() { localStorage.setItem('frgt_state_v7', JSON.stringify(state)); }
+    function load() {
+        const data = localStorage.getItem('frgt_state_v7');
+        if (data) { state = JSON.parse(data); return true; }
+        return false;
+    }
+
+    function showHelp(key) {
+        const data = helpTexts[key];
+        document.getElementById('help-title').innerText = data.title;
+        document.getElementById('help-text').innerHTML = data.text;
+        document.getElementById('help-modal').style.display = 'block';
+    }
+
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    window.closePanel = function() {
+        currentTeamIdx = -1;
+        currentRiderIdx = -1;
+        render();
+        window.scrollTo(0, 0);
+    };
+
+    window.toggleFinished = function(tIdx, rIdx) {
+        const r = state.teams[tIdx].riders[rIdx];
+        r.finished = !r.finished;
+        save();
+        render();
+    };
+
+    function updateSetup() {
+        const count = document.getElementById('teamCount').value;
+        const container = document.getElementById('teams-container');
+        container.innerHTML = '';
+        if(!count) return;
+
+        // Separate and sort Rouleurs and Sprinteurs
+        const allRoles = Object.keys(roles);
+        const rouleurs = allRoles.filter(r => r.includes('Rouleur')).sort();
+        const sprinteurs = allRoles.filter(r => r.includes('Sprinteur')).sort();
+        const sortedRoles = [...rouleurs, ...sprinteurs];
+
+        const roleOptions = `<option value="" disabled selected></option>` + 
+                            sortedRoles.map(r => `<option value="${r}">${r}</option>`).join('');
+        const colorOptions = `<option value="" disabled selected></option>` + 
+                             colors.map(c => `<option value="${c}">${c}</option>`).join('');
+
+        for (let i = 0; i < count; i++) {
+            const div = document.createElement('div');
+            div.className = 'team-setup';
+            div.innerHTML = `
+                <h3>Team ${i + 1}</h3>
+                <label>Color</label>
+                <select id="color-${i}">${colorOptions}</select>
+                <label>Rider 1</label><select id="r1-${i}">${roleOptions}</select>
+                <label>Rider 2</label><select id="r2-${i}">${roleOptions}</select>
+            `;
+            container.appendChild(div);
+        }
+    }
+
+    function render() {
+        document.getElementById('setup-view').classList.add('hidden');
+        document.getElementById('dashboard-view').classList.remove('hidden');
+        document.getElementById('round-display').innerText = `Round ${state.round}`;
+        
+        const modeNames = { 'single': 'Single Race', 'grand_tour': 'Grand Tour' };
+        document.getElementById('mode-display').innerText = modeNames[state.mode] || state.mode;
+
+        const nav = document.getElementById('rider-nav');
+        nav.innerHTML = '';
+        
+        const colRouleur = document.createElement('div');
+        colRouleur.className = 'nav-column';
+        const colSprinteur = document.createElement('div');
+        colSprinteur.className = 'nav-column';
+
+        let allReady = true;
+
+        state.teams.forEach((t, tIdx) => {
+            t.riders.forEach((r, rIdx) => {
+                const isReady = (r.active.length > 0 && r.selectedIndex !== null) || r.finished;
+                if (!isReady) allReady = false;
+
+                const isActive = tIdx === currentTeamIdx && rIdx === currentRiderIdx;
+                const roleType = r.role.includes('Sprinteur') ? 'Sprinteur' : 'Rouleur';
+                const shortRole = r.role.split(' ')[0];
+                
+                const btn = document.createElement('button');
+                btn.className = `nav-btn ${isActive ? 'active' : ''}`;
+                btn.style.borderLeft = `8px solid ${t.color === 'White' ? '#ddd' : t.color.toLowerCase()}`;
+                
+                if (r.finished) {
+                    btn.style.opacity = '0.6';
+                    btn.style.backgroundColor = '#f9f9f9';
+                    btn.style.cursor = 'not-allowed';
+                    btn.disabled = true;
+                } else {
+                    btn.onclick = () => { currentTeamIdx = tIdx; currentRiderIdx = rIdx; render(); };
+                }
+                
+                let btnHtml = `
+                    <div style="text-align: left; line-height: 1.2; flex-grow: 1;">
+                        <span style="font-size: 10px; color: #888;">${t.color} ${roleType}</span><br>
+                        ${shortRole}
+                    </div>
+                `;
+                
+                if (r.finished) {
+                    btnHtml += `<i class="bi bi-flag-fill ready-icon" style="color: #444;"></i>`;
+                } else if (isReady) {
+                    btnHtml += `<i class="bi bi-check-circle-fill ready-icon"></i>`;
+                }
+                
+                btn.innerHTML = btnHtml;
+                
+                if (roleType === 'Rouleur') {
+                    colRouleur.appendChild(btn);
+                } else {
+                    colSprinteur.appendChild(btn);
+                }
+            });
+        });
+
+        nav.appendChild(colRouleur);
+        nav.appendChild(colSprinteur);
+
+        const btnNextTurn = document.getElementById('btn-next-turn');
+        btnNextTurn.innerText = `Proceed to Round ${state.round + 1}`;
+        btnNextTurn.disabled = !allReady;
+
+        const board = document.getElementById('game-board');
+        board.innerHTML = '';
+        
+        if (currentTeamIdx !== -1 && currentRiderIdx !== -1) {
+            const team = state.teams[currentTeamIdx];
+            const r = team.riders[currentRiderIdx];
+            
+            const roleType = r.role.includes('Sprinteur') ? 'Sprinteur' : 'Rouleur';
+            const shortRole = r.role.split(' ')[0];
+            const exhPath = getExhPath(r.role);
+            const exhTotal = [...r.draw, ...r.recycle, ...r.discard, ...r.active].filter(p => p === exhPath).length;
+            const isReady = (r.active.length > 0 && r.selectedIndex !== null) || r.finished;
+
+            const activeHtml = r.active.length > 0 ? r.active.map((path, cIdx) => {
+                const selClass = r.selectedIndex !== null ? (r.selectedIndex === cIdx ? 'selected' : 'unselected') : '';
+                return `<img src="${path}" class="card-img ${selClass}" onclick="selectCard(${currentTeamIdx}, ${currentRiderIdx}, ${cIdx})">`;
+            }).join('') : '<i>Waiting to draw...</i>';
+
+            const tCard = document.createElement('div');
+            tCard.className = 'team-card';
+            tCard.style.borderLeftColor = team.color === 'White' ? '#eee' : team.color.toLowerCase();
+            
+            tCard.innerHTML = `
+                <h3 style="margin:0 0 15px 0; display:flex; align-items:center;">
+                    ${team.color} ${roleType} - ${shortRole} 
+                    <i class="bi bi-info-circle info-icon" style="margin-left:10px; color:#aaa;" onclick="showHelp('riderInfo')"></i>
+                </h3>
+                <div class="rider">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <div class="stats">
+                            Rider's Deck: <b>${r.draw.length}</b> &nbsp;|&nbsp; 
+                            Recycled: <b>${r.recycle.length}</b> &nbsp;|&nbsp; 
+                            <span class="clickable-stat" onclick="showDiscard(${currentTeamIdx}, ${currentRiderIdx})">Discarded: <b>${r.discard.length}</b></span>
+                        </div>
+                    </div>
+                    <div class="card-display">${activeHtml}</div>
+                    
+                    <div class="action-area">
+                        <div class="action-row-top">
+                            <div class="draw-controls">
+                                <button onclick="draw(${currentTeamIdx}, ${currentRiderIdx})" ${r.active.length > 0 || r.finished ? 'disabled' : ''}>Draw Card</button>
+                                <button onclick="draw(${currentTeamIdx}, ${currentRiderIdx})" ${r.active.length !== 1 || r.finished ? 'disabled' : ''}>+ 2nd Card?</button>
+                            </div>
+                            <div class="exh-controls">
+                                <span style="font-size:12px; font-weight:bold; color:#c62828; margin-right:5px; display:flex; align-items:center;">
+                                    Exhaustion Cards: ${exhTotal} 
+                                    <i class="bi bi-info-circle info-icon" style="font-size: 14px; margin-left: 6px; color:#ef9a9a;" onclick="showHelp('exhaustion')"></i>
+                                </span>
+                                <button onclick="modExh(${currentTeamIdx}, ${currentRiderIdx}, 1)">+</button>
+                                <button onclick="modExh(${currentTeamIdx}, ${currentRiderIdx}, -1)">-</button>
+                            </div>
+                        </div>
+                        <div class="action-row-bottom">
+                            <label class="checkbox-label">
+                                <input type="checkbox" onchange="toggleFinished(${currentTeamIdx}, ${currentRiderIdx})" ${r.finished ? 'checked' : ''}> 
+                                Race finished?
+                            </label>
+                            <button class="btn-done" onclick="closePanel()" ${!isReady ? 'disabled' : ''}>DONE</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            board.appendChild(tCard);
+        } 
+        else if (allReady && state.teams.length > 0) {
+            const exhPanel = document.createElement('div');
+            exhPanel.className = 'exh-phase-panel';
+            exhPanel.innerHTML = `
+                <h3 style="margin-top:0; color: #e65100; margin-bottom: 5px;">End of Round: Distribute Exhaustion</h3>
+                <p style="font-size: 13px; color: #666; margin-bottom: 20px; margin-top: 0;">Add Exhaustion Cards to the affected Riders before proceeding to the next round. Cards are automatically added to the Recycled pile.</p>
+            `;
+            
+            state.teams.forEach((t, tIdx) => {
+                t.riders.forEach((r, rIdx) => {
+                    const roleType = r.role.includes('Sprinteur') ? 'Sprinteur' : 'Rouleur';
+                    const shortRole = r.role.split(' ')[0];
+                    const exhPath = getExhPath(r.role);
+                    const exhTotal = [...r.draw, ...r.recycle, ...r.discard, ...r.active].filter(p => p === exhPath).length;
+
+                    const row = document.createElement('div');
+                    row.className = 'exh-phase-row';
+                    
+                    if (r.finished) row.style.opacity = '0.5';
+
+                    row.innerHTML = `
+                        <div class="exh-phase-row-label" style="border-left: 6px solid ${t.color === 'White' ? '#ddd' : t.color.toLowerCase()};">
+                            ${t.color} ${roleType} <span style="font-size:11px; font-weight:normal; color:#666; margin-left: 5px;">(${shortRole}) ${r.finished ? ' [Finished]' : ''}</span>
+                        </div>
+                        <div class="exh-controls">
+                            <span style="font-size:12px; font-weight:bold; color:#c62828; margin-right: 5px;">Total EXH: ${exhTotal}</span>
+                            <button onclick="modExh(${tIdx}, ${rIdx}, -1)">-</button>
+                            <button onclick="modExh(${tIdx}, ${rIdx}, 1)">+</button>
+                        </div>
+                    `;
+                    exhPanel.appendChild(row);
+                });
+            });
+            board.appendChild(exhPanel);
+        }
+    }
+
+    window.draw = function(tIdx, rIdx) {
+        const r = state.teams[tIdx].riders[rIdx];
+        if (r.draw.length === 0) {
+            if (r.recycle.length === 0) {
+                showToast("Rider's Deck is completely empty!");
+                return;
+            }
+            r.draw = shuffle([...r.recycle]);
+            r.recycle = [];
+            showToast(`${state.teams[tIdx].color} Rider: Deck reshuffled from Recycled pile.`);
+        }
+        r.active.push(r.draw.shift());
+        r.selectedIndex = r.active.length === 1 ? 0 : null;
+        save(); render();
+    };
+
+    window.selectCard = function(tIdx, rIdx, cIdx) {
+        state.teams[tIdx].riders[rIdx].selectedIndex = cIdx;
+        save(); render();
+    };
+
+    window.modExh = function(tIdx, rIdx, amount) {
+        const r = state.teams[tIdx].riders[rIdx];
+        const path = getExhPath(r.role);
+        if (amount > 0) r.recycle.push(path);
+        else {
+            const piles = [r.recycle, r.discard, r.draw, r.active];
+            for (let p of piles) {
+                const idx = p.lastIndexOf(path);
+                if (idx !== -1) { p.splice(idx, 1); break; }
+            }
+        }
+        save(); render();
+    };
+
+    window.showDiscard = function(tIdx, rIdx) {
+        const r = state.teams[tIdx].riders[rIdx];
+        const list = document.getElementById('modal-list');
+        document.getElementById('modal-title').innerText = `Discarded: ${r.role}`;
+        list.innerHTML = r.discard.map(p => `<img src="${p}" style="width:200px; border-radius:8px;">`).join('') || '<p style="color:#666;">No cards played yet.</p>';
+        document.getElementById('discard-modal').style.display = 'block';
+    };
+
+    document.getElementById('btn-start').onclick = () => {
+        const errDiv = document.getElementById('setup-error');
+        errDiv.innerText = ''; 
+        
+        const m = document.getElementById('raceMode').value;
+        const countStr = document.getElementById('teamCount').value;
+        
+        if(!m || !countStr) {
+            errDiv.innerText = "Error: Please select Race Mode and Number of Bot Teams.";
+            return;
+        }
+
+        const count = parseInt(countStr, 10);
+        const selectedColors = new Set();
+
+        for (let i = 0; i < count; i++) {
+            const c = document.getElementById(`color-${i}`).value;
+            const r1 = document.getElementById(`r1-${i}`).value;
+            const r2 = document.getElementById(`r2-${i}`).value;
+            
+            if(!c || !r1 || !r2) {
+                errDiv.innerText = `Error in Team ${i+1}: Please complete all selections (Color and both Riders).`;
+                return;
+            }
+            
+            if (selectedColors.has(c)) {
+                errDiv.innerText = `Error: The color '${c}' is selected multiple times. Each team must have a unique color.`;
+                return;
+            }
+            selectedColors.add(c);
+
+            if (r1.includes('Sprinteur') === r2.includes('Sprinteur')) {
+                errDiv.innerText = `Error in Team ${i+1}: You must select exactly 1 Sprinteur and 1 Rouleur.`;
+                return;
+            }
+        }
+        
+        state.mode = m;
+        state.round = 1; 
+        state.teams = [];
+        
+        for (let i = 0; i < count; i++) {
+            const r1 = document.getElementById(`r1-${i}`).value;
+            const r2 = document.getElementById(`r2-${i}`).value;
+            state.teams.push({ color: document.getElementById(`color-${i}`).value, riders: [
+                { role: r1, draw: buildDeck(r1), recycle: [], discard: [], active: [], selectedIndex: null, finished: false },
+                { role: r2, draw: buildDeck(r2), recycle: [], discard: [], active: [], selectedIndex: null, finished: false }
+            ]});
+        }
+        currentTeamIdx = -1;
+        currentRiderIdx = -1;
+        window.scrollTo(0, 0);
+        save(); render();
+    };
+
+    document.getElementById('btn-next-turn').onclick = () => {
+        state.teams.forEach(t => t.riders.forEach(r => {
+            if (r.active.length > 0) {
+                r.discard.push(r.active[r.selectedIndex]);
+                r.recycle.push(...r.active.filter((_, i) => i !== r.selectedIndex));
+                r.active = []; r.selectedIndex = null;
+            }
+        }));
+        
+        state.round++; 
+        currentTeamIdx = -1;
+        currentRiderIdx = -1;
+        window.scrollTo(0, 0);
+        save(); render();
+    };
+
+    document.getElementById('btn-end-stage').onclick = () => {
+        if(!confirm("End stage and reshuffle?")) return;
+        state.round = 1;
+        state.teams.forEach(t => t.riders.forEach(r => {
+            let kept = [];
+            if (state.mode === 'grand_tour') {
+                const path = getExhPath(r.role);
+                const count = [...r.draw, ...r.recycle, ...r.discard, ...r.active].filter(p => p === path).length;
+                kept = Array(Math.floor(count / 2)).fill(path);
+            }
+            r.draw = shuffle([...buildDeck(r.role), ...kept]);
+            r.recycle = []; r.discard = []; r.active = []; r.selectedIndex = null; r.finished = false;
+        }));
+        currentTeamIdx = -1;
+        currentRiderIdx = -1;
+        window.scrollTo(0, 0);
+        save(); render();
+    };
+
+    document.getElementById('btn-reset').onclick = () => { if(confirm("Reset all?")) { localStorage.removeItem('frgt_state_v7'); location.reload(); }};
+    function showToast(m) { const t = document.createElement('div'); t.className = 'toast'; t.innerText = m; document.getElementById('toast-container').appendChild(t); setTimeout(() => t.remove(), 3000); }
+    
+    document.getElementById('teamCount').addEventListener('change', updateSetup);
+    
+    window.onclick = (e) => { 
+        if (e.target.classList.contains('modal')) {
+            closeModal(e.target.id); 
+        }
+    };
+    
+    if (load()) {
+        document.getElementById('btn-resume').classList.remove('hidden');
+    }
+    document.getElementById('btn-resume').onclick = render;
+    updateSetup();
+</script>
+</body>
+</html>
