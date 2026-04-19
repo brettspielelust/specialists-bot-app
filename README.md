@@ -2,6 +2,8 @@
 
 An unofficial web application designed to simulate Specialist Riders (Bots) for a Single Race or a multi-stage Grand Tour in the board game *Flamme Rouge*.
 
+Live: https://app.brettspielelust.de/specialist-bots/
+
 ## About this Project
 
 This application is based on a fan-made [solo version published on BoardGameGeek](https://boardgamegeek.com/filepage/288985/flamme-rouge-grand-tour-solo-rules) by Fredrik Stahre. The original aim of his variant was to enable Flamme Rouge Bots to utilize all the new rules and specialist powers introduced in the *Grand Tour* expansion.
