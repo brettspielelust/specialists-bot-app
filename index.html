@@ -426,7 +426,7 @@
         <div class="accordion-content">
             <p>This web app is based on a fan-made <a href="https://boardgamegeek.com/filepage/288985/flamme-rouge-grand-tour-solo-rules" target="_blank" style="color: #2196F3;">solo version published on BoardGameGeek</a> by Fredrik Stahre. Fredrik's aim was to make the Flamme Rouge Bots use all the new rules included in the Grand Tour expansion (specialist powers).</p>
             <p>Since playing this solo variant requires printing and cutting out a lot of cards, taking up table space and adding administrative overhead, I developed this app. It digitally simulates the drawing and playing of Energy Cards for Specialist Riders (Bots), allowing you to compete against up to five teams. In addition to a Single Race, you can play a Grand Tour (where half of each Bot's Exhaustion Cards are carried over to the next stage).</p>
-            <p><strong>Please note:</strong> This app uses your browser's local storage so you can resume your game later (no login is required, and no data is saved to external databases!). The code for this app is licensed under Creative Commons and is available on GitHub. Feel free to adopt or enhance this project.</p>
+            <p><strong>Please note:</strong> This app uses your browser's local storage so you can resume your game later (no login is required, and no data is saved to external databases!). The code for this app is licensed under Creative Commons and is <a href="https://github.com/brettspielelust/specialists-bot-app/tree/main" target="_blank" style="color: #2196F3;">available on GitHub</a>. Feel free to adopt or enhance this project.</p>
             <p><em>Disclaimer: I am not commercially associated with the game's author or publisher.</em></p>
             <p>App author:<br>
             Oliver Baentsch<br>
@@ -446,11 +446,16 @@
         </div>
 
         <button type="button" class="accordion" onclick="toggleAccordion(this)">
-            Version 1.0.2 | Changelog <i class="bi bi-chevron-down"></i>
+            Version 1.1.1 | Changelog <i class="bi bi-chevron-down"></i>
         </button>
         <div class="accordion-content">
-            <div style="color: #333; margin-top: 15px; font-weight: bold;">April 19th, 2026</div>
+            <div style="color: #333; margin-top: 15px; font-weight: bold;">April 20th, 2026</div>
             <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
+                <li>Dynamic Deck Sizes: Refactored the internal configuration to support individual deck sizes. The application no longer hardcodes 15 cards for everyone, preventing broken image errors for specialist riders with smaller decks.</li>
+                <li>Content Expansion: Added six new Specialist Riders to the database (Flahute, Grimpeur, Mountaineer, Super Rouleur, Super Sprinteur, Puncheur). The application dynamically sorts them into the setup dropdowns and automatically supports their energy and exhaustion decks.</li>
+            </ul>
+            <div style="color: #333; margin-bottom: 5px; font-weight: bold;">April 19th, 2026</div>
+            <ul style="margin-top: 0; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
                 <li>Bugfix: Escaped HTML tags in the changelog text that previously broke the DOM parser and prevented Javascript (like the Modals) from executing.</li>
                 <li>Dashboard Layout Update: Constrained the dashboard view to a maximum width of 600px to perfectly match the boxed desktop layout of the setup screen.</li>
                 <li>UI Restructuring: Rearranged the start page layout, moving accordions below the Start button and merging the Changelog into the third accordion.</li>
@@ -499,13 +504,21 @@
 </div>
 
 <script>
+    // Konfiguration der Rollen mit jeweiligem Dateipräfix und individueller Kartenanzahl.
+    // Falls ein Fahrer nur 14 Karten hat, ändere hier einfach die 'count'-Zahl von 15 auf 14.
     const roles = {
-        'Squirrel (Sprinteur)': 'squirrel',
-        'Domestike (Rouleur)': 'domestike',
-        'Baroudeur (Rouleur)': 'baroudeur',
-        'Flandrien (Rouleur)': 'flandrien',
-        'Polyvalent (Sprinteur)': 'polyvalent',
-        'Descender (Sprinteur)': 'descender'
+        'Squirrel (Sprinteur)': { prefix: 'squirrel', count: 15 },
+        'Domestike (Rouleur)': { prefix: 'domestike', count: 15 },
+        'Baroudeur (Rouleur)': { prefix: 'baroudeur', count: 15 },
+        'Flandrien (Rouleur)': { prefix: 'flandrien', count: 15 },
+        'Polyvalent (Sprinteur)': { prefix: 'polyvalent', count: 15 },
+        'Descender (Sprinteur)': { prefix: 'descender', count: 15 },
+        'Flahute (Sprinteur)': { prefix: 'flahute', count: 15 },
+        'Grimpeur (Rouleur)': { prefix: 'grimpeur', count: 15 },
+        'Mountaineer (Sprinteur)': { prefix: 'mountaineer', count: 14 },
+        'Super Rouleur (Rouleur)': { prefix: 'superrouleur', count: 15 },
+        'Super Sprinteur (Sprinteur)': { prefix: 'supersprinteur', count: 15 },
+        'Puncheur (Rouleur)': { prefix: 'puncheur', count: 14 }
     };
     
     const helpTexts = {
@@ -564,14 +577,16 @@
 
     function buildDeck(roleKey) {
         const deck = [];
-        const roleFile = roles[roleKey];
-        for (let i = 1; i <= 15; i++) {
-            deck.push(`assets/${roleFile}_${i.toString().padStart(2, '0')}.webp`);
+        const roleData = roles[roleKey];
+        for (let i = 1; i <= roleData.count; i++) {
+            deck.push(`assets/${roleData.prefix}_${i.toString().padStart(2, '0')}.webp`);
         }
         return shuffle(deck);
     }
 
-    function getExhPath(roleKey) { return `assets/${roles[roleKey]}_exhaustion.webp`; }
+    function getExhPath(roleKey) { 
+        return `assets/${roles[roleKey].prefix}_exhaustion.webp`; 
+    }
 
     function save() { localStorage.setItem('frgt_state_v7', JSON.stringify(state)); }
     function load() {
