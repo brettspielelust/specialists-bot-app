@@ -45,14 +45,7 @@
         button:disabled { opacity: 0.5; cursor: not-allowed; }
         
         select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
             background-color: white;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat;
-            background-position: right 10px top 50%;
-            background-size: 12px auto;
             padding: 10px;
             margin: 5px 0 15px 0;
             border-radius: 4px;
@@ -426,7 +419,7 @@
         <div class="accordion-content">
             <p>This web app is based on a fan-made <a href="https://boardgamegeek.com/filepage/288985/flamme-rouge-grand-tour-solo-rules" target="_blank" style="color: #2196F3;">solo version published on BoardGameGeek</a> by Fredrik Stahre. Fredrik's aim was to make the Flamme Rouge Bots use all the new rules included in the Grand Tour expansion (specialist powers).</p>
             <p>Since playing this solo variant requires printing and cutting out a lot of cards, taking up table space and adding administrative overhead, I developed this app. It digitally simulates the drawing and playing of Energy Cards for Specialist Riders (Bots), allowing you to compete against up to five teams. In addition to a Single Race, you can play a Grand Tour (where half of each Bot's Exhaustion Cards are carried over to the next stage).</p>
-            <p><strong>Please note:</strong> This app uses your browser's local storage so you can resume your game later (no login is required, and no data is saved to external databases!). The code for this app is licensed under Creative Commons and is <a href="https://github.com/brettspielelust/specialists-bot-app/tree/main" target="_blank" style="color: #2196F3;">available on GitHub</a>. Feel free to adopt or enhance this project.</p>
+            <p><strong>Please note:</strong> This app uses your browser's local storage so you can resume your game later (no login is required, and no data is saved to external databases!). The code for this app is licensed under Creative Commons and is available on GitHub. Feel free to adopt or enhance this project.</p>
             <p><em>Disclaimer: I am not commercially associated with the game's author or publisher.</em></p>
             <p>App author:<br>
             Oliver Baentsch<br>
@@ -446,31 +439,23 @@
         </div>
 
         <button type="button" class="accordion" onclick="toggleAccordion(this)">
-            Version 1.1.1 | Changelog <i class="bi bi-chevron-down"></i>
+            Version 1.1.9 | Changelog <i class="bi bi-chevron-down"></i>
         </button>
         <div class="accordion-content">
             <div style="color: #333; margin-top: 15px; font-weight: bold;">April 20th, 2026</div>
             <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
-                <li>Dynamic Deck Sizes: Refactored the internal configuration to support individual deck sizes. The application no longer hardcodes 15 cards for everyone, preventing broken image errors for specialist riders with smaller decks.</li>
-                <li>Content Expansion: Added six new Specialist Riders to the database (Flahute, Grimpeur, Mountaineer, Super Rouleur, Super Sprinteur, Puncheur). The application dynamically sorts them into the setup dropdowns and automatically supports their energy and exhaustion decks.</li>
+                <li>Critical Bugfix: Removed a legacy script reference to the deleted `changelog-container` that caused a fatal crash (White Screen of Death) when clicking "Start Race" or "Resume Saved Game".</li>
+                <li>Refactoring: Removed the padding workaround for inconsistent filenames. All image requests now strictly enforce a two-digit format with leading zeros (e.g., _01.webp). Requires server-side filename standardization.</li>
+                <li>Bugfix: Removed custom styling on dropdown menus to fix a WebKit bug that made dynamically injected selection fields unclickable on mobile devices. Dropdowns now use reliable native OS rendering.</li>
+                <li>Save State Wipe: Bumped the save-game variable to v8 to clear corrupted decks from your local storage.</li>
+                <li>Dynamic Deck Sizes: Refactored the internal configuration to support individual deck sizes (14 or 15 cards).</li>
+                <li>Content Expansion: Added six new Specialist Riders to the database.</li>
+                <li>Layout Fix: Corrected the order of elements on the setup screen. The Dropdowns and Start button are now at the top, immediately following the intro.</li>
             </ul>
             <div style="color: #333; margin-bottom: 5px; font-weight: bold;">April 19th, 2026</div>
             <ul style="margin-top: 0; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
-                <li>Bugfix: Escaped HTML tags in the changelog text that previously broke the DOM parser and prevented Javascript (like the Modals) from executing.</li>
-                <li>Dashboard Layout Update: Constrained the dashboard view to a maximum width of 600px to perfectly match the boxed desktop layout of the setup screen.</li>
-                <li>UI Restructuring: Rearranged the start page layout, moving accordions below the Start button and merging the Changelog into the third accordion.</li>
-            </ul>
-            <div style="color: #333; margin-bottom: 5px; font-weight: bold;">April 18th, 2026</div>
-            <ul style="margin-top: 0; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
-                <li>Sequential Wizard Flow: Replaced the scrolling dashboard with a focused, one-rider-at-a-time view. Navigation buttons are now auto-sorted by role.</li>
-                <li>End-of-Round Exhaustion: Added a centralized panel at the end of the round to distribute Exhaustion Cards efficiently all at once.</li>
-                <li>"Race Finished" Option: Added a checkbox for riders who cross the finish line, excluding them from future rounds and marking them with a flag icon.</li>
-            </ul>
-            <div style="color: #333; margin-bottom: 5px; font-weight: bold;">April 17th, 2026</div>
-            <ul style="margin-top: 0; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
-                <li>Inline Setup Validation: Replaced intrusive browser alert pop-ups with clean, inline error messages during team setup.</li>
-                <li>Responsive UI: The header image now scales correctly on mobile devices, and all info modals close reliably when clicking the dark background.</li>
-                <li>In-App Help System: Integrated clickable info icons next to key elements and added an expandable "How to use" accordion on the start screen.</li>
+                <li>Bugfix: Escaped HTML tags in the changelog text that broke the DOM parser.</li>
+                <li>Dashboard Layout Update: Constrained the dashboard view to 600px width.</li>
             </ul>
         </div>
     </div>
@@ -504,8 +489,6 @@
 </div>
 
 <script>
-    // Konfiguration der Rollen mit jeweiligem Dateipräfix und individueller Kartenanzahl.
-    // Falls ein Fahrer nur 14 Karten hat, ändere hier einfach die 'count'-Zahl von 15 auf 14.
     const roles = {
         'Squirrel (Sprinteur)': { prefix: 'squirrel', count: 15 },
         'Domestike (Rouleur)': { prefix: 'domestike', count: 15 },
@@ -517,7 +500,7 @@
         'Grimpeur (Rouleur)': { prefix: 'grimpeur', count: 15 },
         'Mountaineer (Sprinteur)': { prefix: 'mountaineer', count: 14 },
         'Super Rouleur (Rouleur)': { prefix: 'superrouleur', count: 15 },
-        'Super Sprinteur (Sprinteur)': { prefix: 'supersprinteur', count: 15 },
+        'Super Sprinteur (Sprinteur)': { prefix: 'supersprinteur', count: 14 },
         'Puncheur (Rouleur)': { prefix: 'puncheur', count: 14 }
     };
     
@@ -578,6 +561,7 @@
     function buildDeck(roleKey) {
         const deck = [];
         const roleData = roles[roleKey];
+        if (!roleData) return [];
         for (let i = 1; i <= roleData.count; i++) {
             deck.push(`assets/${roleData.prefix}_${i.toString().padStart(2, '0')}.webp`);
         }
@@ -585,12 +569,13 @@
     }
 
     function getExhPath(roleKey) { 
-        return `assets/${roles[roleKey].prefix}_exhaustion.webp`; 
+        const roleData = roles[roleKey];
+        return roleData ? `assets/${roleData.prefix}_exhaustion.webp` : ''; 
     }
 
-    function save() { localStorage.setItem('frgt_state_v7', JSON.stringify(state)); }
+    function save() { localStorage.setItem('frgt_state_v8', JSON.stringify(state)); }
     function load() {
-        const data = localStorage.getItem('frgt_state_v7');
+        const data = localStorage.getItem('frgt_state_v8');
         if (data) { state = JSON.parse(data); return true; }
         return false;
     }
@@ -953,7 +938,7 @@
         save(); render();
     };
 
-    document.getElementById('btn-reset').onclick = () => { if(confirm("Reset all?")) { localStorage.removeItem('frgt_state_v7'); location.reload(); }};
+    document.getElementById('btn-reset').onclick = () => { if(confirm("Reset all?")) { localStorage.removeItem('frgt_state_v8'); location.reload(); }};
     function showToast(m) { const t = document.createElement('div'); t.className = 'toast'; t.innerText = m; document.getElementById('toast-container').appendChild(t); setTimeout(() => t.remove(), 3000); }
     
     document.getElementById('teamCount').addEventListener('change', updateSetup);
