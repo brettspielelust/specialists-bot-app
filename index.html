@@ -45,7 +45,14 @@
         button:disabled { opacity: 0.5; cursor: not-allowed; }
         
         select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
             background-color: white;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px top 50%;
+            background-size: 12px auto;
             padding: 10px;
             margin: 5px 0 15px 0;
             border-radius: 4px;
@@ -74,6 +81,7 @@
             margin: -20px -20px 20px -20px;
             border-radius: 0;
             object-fit: cover;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         #setup-view {
@@ -419,7 +427,7 @@
         <div class="accordion-content">
             <p>This web app is based on a fan-made <a href="https://boardgamegeek.com/filepage/288985/flamme-rouge-grand-tour-solo-rules" target="_blank" style="color: #2196F3;">solo version published on BoardGameGeek</a> by Fredrik Stahre. Fredrik's aim was to make the Flamme Rouge Bots use all the new rules included in the Grand Tour expansion (specialist powers).</p>
             <p>Since playing this solo variant requires printing and cutting out a lot of cards, taking up table space and adding administrative overhead, I developed this app. It digitally simulates the drawing and playing of Energy Cards for Specialist Riders (Bots), allowing you to compete against up to five teams. In addition to a Single Race, you can play a Grand Tour (where half of each Bot's Exhaustion Cards are carried over to the next stage).</p>
-            <p><strong>Please note:</strong> This app uses your browser's local storage so you can resume your game later (no login is required, and no data is saved to external databases!). The code for this app is licensed under Creative Commons and is available on GitHub. Feel free to adopt or enhance this project.</p>
+            <p><strong>Please note:</strong> This app uses your browser's local storage so you can resume your game later (no login is required, and no data is saved to external databases!). The code for this app is licensed under Creative Commons and is available on <a href="https://github.com/oliverbaentsch/specialist-riders-app" target="_blank" style="color: #2196F3;">GitHub</a>. Feel free to adopt or enhance this project.</p>
             <p><em>Disclaimer: I am not commercially associated with the game's author or publisher.</em></p>
             <p>App author:<br>
             Oliver Baentsch<br>
@@ -434,14 +442,20 @@
             <p>On the setup screen, choose whether you want to ride a Single Race or embark on a multi-stage Grand Tour.</p>
             <p>Next, select the number of competing Bot Teams. Assign a color to each team and recruit their Specialist Riders. Every team must consist of exactly one Rouleur and one Sprinteur. You may recruit the same Specialist type across multiple teams.</p>
             <p>Click <strong>"START RACE"</strong> to begin the first round.</p>
-            <p>During the race, select a Rider in turn order (starting from the front of the peloton) to open their action panel. Click <strong>"Draw Card"</strong> to reveal their Energy Card, and decide if a second card is required according to the rules.</p>
+            <p>During the race, select a Rider in turn order (starting from the front of the peloton) to open their action panel. Click <strong>"Draw Card"</strong> to reveal their Energy Card, and decide if a second card is required <a href="/specialist-bots/rules.html" style="color: #2196F3;">according to the rules.</a></p>
             <p>Resolve all Bots in turn order. At the end of the round, distribute Exhaustion Cards to the affected Riders before proceeding to the next round.</p>
+            <p><a href="/specialist-bots/rules.html" style="color: #2196F3;">Flamme Rouge Solo Rules for Specialist Bots</a></p>
         </div>
 
+
         <button type="button" class="accordion" onclick="toggleAccordion(this)">
-            Version 1.1.9 | Changelog <i class="bi bi-chevron-down"></i>
+            Version 1.1.10 | Changelog <i class="bi bi-chevron-down"></i>
         </button>
         <div class="accordion-content">
+            <div style="color: #333; margin-top: 15px; font-weight: bold;">April 21st, 2026</div>
+            <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
+                <li>New Feature: Added "Force shuffling of Riders Cards" checkbox. Selecting this option before proceeding to the next round merges and shuffles all riders' Draw and Recycle piles.</li>
+            </ul>
             <div style="color: #333; margin-top: 15px; font-weight: bold;">April 20th, 2026</div>
             <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
                 <li>Critical Bugfix: Removed a legacy script reference to the deleted `changelog-container` that caused a fatal crash (White Screen of Death) when clicking "Start Race" or "Resume Saved Game".</li>
@@ -801,6 +815,19 @@
                     exhPanel.appendChild(row);
                 });
             });
+            
+            // SHUFFLE CHECKBOX ADDED HERE
+            const shuffleContainer = document.createElement('div');
+            shuffleContainer.style.marginTop = "20px";
+            shuffleContainer.style.paddingTop = "15px";
+            shuffleContainer.style.borderTop = "0px solid #eee";
+            shuffleContainer.innerHTML = `
+                <label class="checkbox-label" style="justify-content: center; background: #fafafa; padding: 10px; border-radius: 4px; border: 1px solid #ddd;">
+                    <input type="checkbox" id="force-shuffle"> Force shuffling of Riders Cards
+                </label>
+            `;
+            exhPanel.appendChild(shuffleContainer);
+            
             board.appendChild(exhPanel);
         }
     }
@@ -904,13 +931,27 @@
     };
 
     document.getElementById('btn-next-turn').onclick = () => {
+        // CHECK SHUFFLE STATE
+        const forceShuffleCheckbox = document.getElementById('force-shuffle');
+        const isForceShuffle = forceShuffleCheckbox && forceShuffleCheckbox.checked;
+
         state.teams.forEach(t => t.riders.forEach(r => {
             if (r.active.length > 0) {
                 r.discard.push(r.active[r.selectedIndex]);
                 r.recycle.push(...r.active.filter((_, i) => i !== r.selectedIndex));
                 r.active = []; r.selectedIndex = null;
             }
+            
+            // EXECUTE FORCE SHUFFLE
+            if (isForceShuffle) {
+                r.draw = shuffle([...r.draw, ...r.recycle]);
+                r.recycle = [];
+            }
         }));
+        
+        if (isForceShuffle) {
+            showToast("All Riders: Decks combined and reshuffled.");
+        }
         
         state.round++; 
         currentTeamIdx = -1;
