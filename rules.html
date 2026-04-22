@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solo Rules - FRGT Bot-App</title>
+    <style>
+    
+    
+    /* Grundstyling für alle Labels */
+.label {
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-family: sans-serif;
+  font-weight: bold;
+  display: inline-block;
+  margin: 2px;
+}
+
+/* Spezifische Farben */
+    .green {
+  background-color: #2e7d32; /* Ein angenehmes Grün */
+  color: white;
+}
+
+.red {
+  background-color: #d32f2f; /* Ein klares Rot */
+  color: white;
+}
+
+.yellow {
+  background-color: #fdd835; /* Ein gut sichtbares Gelb */
+  color: black;
+}
+
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --border-radius: 8px;
+            --info-color: #2196F3;
+        }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { 
+            margin-top: 10px;
+            margin-bottom: 5px; 
+            font-size: 24px;
+        }
+        h2 {
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #222;
+        }
+        p {
+            line-height: 1.6;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #444;
+        }
+        .sub-line {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        a {
+            color: var(--info-color);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .header-image {
+            width: calc(100% + 40px);
+            max-width: none;
+            height: auto;
+            max-height: 200px;
+            display: block;
+            margin: -20px -20px 20px -20px;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            object-fit: cover;
+        }
+
+        #rules-view {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="rules-view">
+        <img src="assets/header.webp" alt="Specialist Riders App Header" class="header-image" onerror="this.style.display='none'">
+        
+        <h1>Flamme Rouge: Grand Tour – Solo Rules</h1>
+        <div class="sub-line">
+            Rules for the Specialist Bots in Flamme Rouge Grand Tour.
+        </div>
+
+        <p>
+            This unofficial solo mode by Fredrik Stahre simulates automated riders ("Bots") that follow a consistent decision logic based on card draws rather than tactical intent. The system is designed so that, in most cases, the Bot’s behavior resolves automatically without interpretation.
+        </p>
+        <p>
+            Specialist powers require no modification in solo play; Bots use them exactly as human players would.
+        </p>
+
+        <h2>Drawing Cards</h2>
+        <p>
+            At the core of the system is a simple principle: whenever a Bot takes its turn, draw one card and use the movement value (MP) corresponding to the type of space the rider is currently on (flat, downhill, supply, or uphill). If the value shown is <span class="label green">green</span>, the Bot immediately uses it and moves accordingly. If the value is <span class="label yellow">yellow</span> or <span class="label red">red</span>, a second card is drawn and the better of the two is selected.
+        </p>
+
+        <h2>Exception concerning uphill movement</h2>
+        <p>
+            However, this basic procedure is modified by an important exception concerning uphill movement, which takes priority over all other considerations. If the Bot could reach an uphill space by using the uphill movement value printed on the card, it must use that uphill value instead of the value associated with its starting terrain.
+        </p>
+        <p>
+            This applies regardless of whether the Bot actually begins its movement on an uphill space. If the uphill value is <span class="label yellow">yellow</span> or <span class="label red">red</span>, a second card is still drawn and both uphill values are compared. If the second card’s uphill value would not reach the uphill space, the first card’s uphill value must be used regardless of color. When a Bot starts its movement on an uphill space, it always uses the uphill movement value.
+        </p>
+        <p>
+            In all other situations – which make up the majority of cases – the Bot uses the movement value corresponding to its starting space.
+        </p>
+
+        <h2>Comparing two Cards</h2>
+        <p>
+            When comparing two cards, follow a strict hierarchy. First, color determines priority:
+        </p>
+        <ul style="color: #444; line-height: 1.6; padding-left: 20px;">
+            <li><span class="label green">green</span> is always preferred over <span class="label yellow">yellow</span>, and <span class="label yellow">yellow</span> over <span class="label red">red</span>.</li>
+            <li>If both cards share the same color, choose the one that allows the Bot to complete its full movement without prematurely entering an uphill space.</li>
+            <li>If this still does not resolve the choice, prefer the card marked with a small <strong>"1"</strong> indicator.</li>
+            <li>If both cards are otherwise identical, exhaustion cards are preferred over non-exhaustion cards.</li>
+        </ul>
+        <p>
+            In rare edge cases where the rules do not clearly dictate a choice, resolve the situation as a rational player would, with one guiding principle: if a Bot can cross the finish line with a given card, it should do so.
+        </p>
+        <p>
+            The unused card is always discarded into the recycle pile.
+        </p>
+        <p>
+            After selecting the card, the Bot moves as far as possible according to the standard rules. This may result in fewer spaces moved than indicated if an uphill space would otherwise be entered or if the rider is blocked.
+        </p>
+        <p>
+            Importantly, Bots do not consider tactical positioning, slipstreams, or blocking when choosing between cards—they only follow the comparison rules described above.
+        </p>
+
+        <h2>Exhaustion</h2>
+        <p>
+            Bots gain exhaustion cards in exactly the same way as human players and these cards are shuffled into their deck via the recycle pile. Between stages, Bots return half of their exhaustion cards (rounded down), just like human players, and rest days are handled identically.
+        </p>
+
+        <h2>Breakaway</h2>
+        <p>
+            For stages using the Breakaway rule, human players resolve their bids first. Each Bot then selects the rider with the fewest exhaustion cards; ties are broken by choosing the rider positioned further back on the starting grid.
+        </p>
+        <p>
+            A corresponding card is drawn and the Breakaway value is evaluated using the same color logic as movement: <span class="label green">green</span> values are used immediately, while <span class="label yellow">yellow</span> or <span class="label red">red</span> values require drawing a second card and choosing the better option. This process is repeated for subsequent bids before resolving the Breakaway phase as usual.
+        </p>
+
+        <h2>Conclusion & House rules</h2>
+        <p>
+            These rules have been implemented in this web app to the best of my knowledge, including card drawing and selection, handling of exhaustion cards, breakaways and automatic reshuffling when a Bot’s deck runs out.
+        </p>
+        <p>
+            In addition, I have included an option to manually trigger a reshuffle of the Bots’ draw decks at the end of a round for the following reason:
+        </p>
+        <p>
+            To ensure that Exhaustion cards cycle back into the Bots’ draw decks more quickly, we use the following house rule: we force a reshuffle of all Bot decks as soon as the last Bot has reached the halfway point of the race. Alternatively, you can reshuffle the Bots’ decks whenever a human player has to reshuffle their own recycle pile. This way, recycled cards and newly gained Exhaustion cards re-enter play in a more natural and realistic manner.
+        </p>
+
+        <h2>Thoughts on balancing</h2>
+        <p>
+            An obviously drawback is that Bots tend to start the race very aggressively, especially on tracks with few or no hills. Because they consistently favor higher-value cards, they end up playing many high cards early on, leaving mostly low-value cards for the final part of the stage. This often results in unusually slow “sprints” in the closing turns.
+        </p>
+        <p>
+            To counter this and create a more balanced race progression, you can apply the following house rule: until the halfway point of the race OR the first sprint section OR the first uphill segment is reached, always draw a second card for the Bots and, if both cards show <span class="label green">green</span> movement values, choose the lower one.
+        </p>
+        <p>
+            This approach helps the riders conserve energy and leads to a more natural buildup toward the decisive final phase of the stage.
+        </p>
+
+        <a href="/specialist-bots/index.html" class="back-link">&larr; Back to App</a>
+    </div>
+</div>
+
+</body>
+</html>
