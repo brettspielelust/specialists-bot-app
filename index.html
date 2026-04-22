@@ -79,9 +79,8 @@
             max-height: 200px;
             display: block;
             margin: -20px -20px 20px -20px;
-            border-radius: 0;
-            object-fit: cover;
             border-radius: var(--border-radius) var(--border-radius) 0 0;
+            object-fit: cover;
         }
 
         #setup-view {
@@ -427,7 +426,7 @@
         <div class="accordion-content">
             <p>This web app is based on a fan-made <a href="https://boardgamegeek.com/filepage/288985/flamme-rouge-grand-tour-solo-rules" target="_blank" style="color: #2196F3;">solo version published on BoardGameGeek</a> by Fredrik Stahre. Fredrik's aim was to make the Flamme Rouge Bots use all the new rules included in the Grand Tour expansion (specialist powers).</p>
             <p>Since playing this solo variant requires printing and cutting out a lot of cards, taking up table space and adding administrative overhead, I developed this app. It digitally simulates the drawing and playing of Energy Cards for Specialist Riders (Bots), allowing you to compete against up to five teams. In addition to a Single Race, you can play a Grand Tour (where half of each Bot's Exhaustion Cards are carried over to the next stage).</p>
-            <p><strong>Please note:</strong> This app uses your browser's local storage so you can resume your game later (no login is required, and no data is saved to external databases!). The code for this app is licensed under Creative Commons and is available on <a href="https://github.com/oliverbaentsch/specialist-riders-app" target="_blank" style="color: #2196F3;">GitHub</a>. Feel free to adopt or enhance this project.</p>
+            <p><strong>Please note:</strong> This app uses your browser's local storage so you can resume your game later (no login is required, and no data is saved to external databases!). The code for this app is licensed under Creative Commons and is <a href="https://github.com/brettspielelust/specialists-bot-app/blob/main/index.html" target="_blank" style="color: #2196F3;">available on GitHub</a>. Feel free to adopt or enhance this project.</p>
             <p><em>Disclaimer: I am not commercially associated with the game's author or publisher.</em></p>
             <p>App author:<br>
             Oliver Baentsch<br>
@@ -442,16 +441,20 @@
             <p>On the setup screen, choose whether you want to ride a Single Race or embark on a multi-stage Grand Tour.</p>
             <p>Next, select the number of competing Bot Teams. Assign a color to each team and recruit their Specialist Riders. Every team must consist of exactly one Rouleur and one Sprinteur. You may recruit the same Specialist type across multiple teams.</p>
             <p>Click <strong>"START RACE"</strong> to begin the first round.</p>
-            <p>During the race, select a Rider in turn order (starting from the front of the peloton) to open their action panel. Click <strong>"Draw Card"</strong> to reveal their Energy Card, and decide if a second card is required <a href="/specialist-bots/rules.html" style="color: #2196F3;">according to the rules.</a></p>
+            <p>During the race, select a Rider in turn order (starting from the front of the peloton) to open their action panel. Click <strong>"Draw Card"</strong> to reveal their Energy Card, and decide if a second card is required <a href="/specialist-bots/rules.html" target="_blank" style="color: #2196F3;">according to the rules.</a>.</p>
             <p>Resolve all Bots in turn order. At the end of the round, distribute Exhaustion Cards to the affected Riders before proceeding to the next round.</p>
-            <p><a href="/specialist-bots/rules.html" style="color: #2196F3;">Flamme Rouge Solo Rules for Specialist Bots</a></p>
+            <p><a href="/specialist-bots/rules.html" target="_blank" style="color: #2196F3;">Flamme Rouge Solo Rules for Specialist Bots</a></p>
         </div>
 
-
         <button type="button" class="accordion" onclick="toggleAccordion(this)">
-            Version 1.1.10 | Changelog <i class="bi bi-chevron-down"></i>
+            Version 1.2.1 | Changelog <i class="bi bi-chevron-down"></i>
         </button>
         <div class="accordion-content">
+            <div style="color: #333; margin-top: 15px; font-weight: bold;">April 22nd, 2026</div>
+            <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
+                <li>New Feature: Implemented optional Breakaway Phase logic exclusively for Round 1. Includes a toggle to restrict actions to exactly one rider per team.</li>
+                <li>New Feature: Added a specific "Second Bid" button to the rider panel during Breakaways, allowing seamless logging of the first bid and drawing for a second bid.</li>
+            </ul>
             <div style="color: #333; margin-top: 15px; font-weight: bold;">April 21st, 2026</div>
             <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
                 <li>New Feature: Added "Force shuffling of Riders Cards" checkbox. Selecting this option before proceeding to the next round merges and shuffles all riders' Draw and Recycle piles.</li>
@@ -466,11 +469,6 @@
                 <li>Content Expansion: Added six new Specialist Riders to the database.</li>
                 <li>Layout Fix: Corrected the order of elements on the setup screen. The Dropdowns and Start button are now at the top, immediately following the intro.</li>
             </ul>
-            <div style="color: #333; margin-bottom: 5px; font-weight: bold;">April 19th, 2026</div>
-            <ul style="margin-top: 0; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
-                <li>Bugfix: Escaped HTML tags in the changelog text that broke the DOM parser.</li>
-                <li>Dashboard Layout Update: Constrained the dashboard view to 600px width.</li>
-            </ul>
         </div>
     </div>
 
@@ -481,6 +479,7 @@
         </div>
         
         <div class="instruction-text">Choose Rider to draw their Energy Card(s), starting with the frontmost Rider.</div>
+        <div id="breakaway-toggle-container"></div>
         <div id="rider-nav" class="rider-nav-bar"></div>
         <div id="game-board"></div>
         
@@ -538,7 +537,7 @@
     };
 
     const colors = ['White', 'Black', 'Blue', 'Green', 'Pink', 'Red'];
-    let state = { mode: 'single', round: 1, teams: [] };
+    let state = { mode: 'single', round: 1, teams: [], breakawayActive: false };
     let currentTeamIdx = -1;
     let currentRiderIdx = -1;
 
@@ -590,7 +589,11 @@
     function save() { localStorage.setItem('frgt_state_v8', JSON.stringify(state)); }
     function load() {
         const data = localStorage.getItem('frgt_state_v8');
-        if (data) { state = JSON.parse(data); return true; }
+        if (data) { 
+            state = JSON.parse(data); 
+            if (state.breakawayActive === undefined) state.breakawayActive = false;
+            return true; 
+        }
         return false;
     }
 
@@ -614,6 +617,23 @@
         const r = state.teams[tIdx].riders[rIdx];
         r.finished = !r.finished;
         save();
+        render();
+    };
+
+    window.toggleBreakaway = function() {
+        state.breakawayActive = !state.breakawayActive;
+        save();
+        render();
+    };
+
+    window.doSecondBid = function(tIdx, rIdx) {
+        const r = state.teams[tIdx].riders[rIdx];
+        r.discard.push(r.active[r.selectedIndex]);
+        r.recycle.push(...r.active.filter((_, i) => i !== r.selectedIndex));
+        r.active = [];
+        r.selectedIndex = null;
+        r.didFirstBid = true;
+        save(); 
         render();
     };
 
@@ -656,6 +676,20 @@
         const modeNames = { 'single': 'Single Race', 'grand_tour': 'Grand Tour' };
         document.getElementById('mode-display').innerText = modeNames[state.mode] || state.mode;
 
+        const hasDrawnCards = state.teams.some(t => t.riders.some(r => r.active.length > 0 || r.discard.length > 0));
+        const breakawayContainer = document.getElementById('breakaway-toggle-container');
+        if (state.round === 1 && !hasDrawnCards) {
+            breakawayContainer.innerHTML = `
+                <div style="text-align:center; margin-bottom: 15px;">
+                    <label class="checkbox-label" style="justify-content: center; display: inline-flex; background: #fff3e0; padding: 10px 15px; border-radius: 4px; border: 1px solid #ffcc80; font-size: 14px;">
+                        <input type="checkbox" onchange="toggleBreakaway()" ${state.breakawayActive ? 'checked' : ''}> Enable Breakaway Phase (Round 1)
+                    </label>
+                </div>
+            `;
+        } else {
+            breakawayContainer.innerHTML = '';
+        }
+
         const nav = document.getElementById('rider-nav');
         nav.innerHTML = '';
         
@@ -667,9 +701,19 @@
         let allReady = true;
 
         state.teams.forEach((t, tIdx) => {
+            const teamHasBreakawayActed = state.breakawayActive ? t.riders.some(rid => rid.active.length > 0 || rid.didFirstBid || rid.finished) : false;
+            
+            if (state.breakawayActive) {
+                const teamReady = t.riders.some(r => (r.active.length > 0 && r.selectedIndex !== null) || r.finished);
+                if (!teamReady) allReady = false;
+            }
+
             t.riders.forEach((r, rIdx) => {
                 const isReady = (r.active.length > 0 && r.selectedIndex !== null) || r.finished;
-                if (!isReady) allReady = false;
+                
+                if (!state.breakawayActive && !isReady) {
+                    allReady = false;
+                }
 
                 const isActive = tIdx === currentTeamIdx && rIdx === currentRiderIdx;
                 const roleType = r.role.includes('Sprinteur') ? 'Sprinteur' : 'Rouleur';
@@ -679,7 +723,7 @@
                 btn.className = `nav-btn ${isActive ? 'active' : ''}`;
                 btn.style.borderLeft = `8px solid ${t.color === 'White' ? '#ddd' : t.color.toLowerCase()}`;
                 
-                if (r.finished) {
+                if (r.finished || (state.breakawayActive && teamHasBreakawayActed && r.active.length === 0 && !r.didFirstBid)) {
                     btn.style.opacity = '0.6';
                     btn.style.backgroundColor = '#f9f9f9';
                     btn.style.cursor = 'not-allowed';
@@ -760,6 +804,7 @@
                             <div class="draw-controls">
                                 <button onclick="draw(${currentTeamIdx}, ${currentRiderIdx})" ${r.active.length > 0 || r.finished ? 'disabled' : ''}>Draw Card</button>
                                 <button onclick="draw(${currentTeamIdx}, ${currentRiderIdx})" ${r.active.length !== 1 || r.finished ? 'disabled' : ''}>+ 2nd Card?</button>
+                                ${state.breakawayActive ? `<button onclick="doSecondBid(${currentTeamIdx}, ${currentRiderIdx})" style="background-color: #FF9800; color: white; border-color: #F57C00;" ${r.active.length > 0 && r.selectedIndex !== null && !r.didFirstBid ? '' : 'disabled'}>Second Bid</button>` : ''}
                             </div>
                             <div class="exh-controls">
                                 <span style="font-size:12px; font-weight:bold; color:#c62828; margin-right:5px; display:flex; align-items:center;">
@@ -915,13 +960,14 @@
         state.mode = m;
         state.round = 1; 
         state.teams = [];
+        state.breakawayActive = false;
         
         for (let i = 0; i < count; i++) {
             const r1 = document.getElementById(`r1-${i}`).value;
             const r2 = document.getElementById(`r2-${i}`).value;
             state.teams.push({ color: document.getElementById(`color-${i}`).value, riders: [
-                { role: r1, draw: buildDeck(r1), recycle: [], discard: [], active: [], selectedIndex: null, finished: false },
-                { role: r2, draw: buildDeck(r2), recycle: [], discard: [], active: [], selectedIndex: null, finished: false }
+                { role: r1, draw: buildDeck(r1), recycle: [], discard: [], active: [], selectedIndex: null, finished: false, didFirstBid: false },
+                { role: r2, draw: buildDeck(r2), recycle: [], discard: [], active: [], selectedIndex: null, finished: false, didFirstBid: false }
             ]});
         }
         currentTeamIdx = -1;
@@ -947,6 +993,8 @@
                 r.draw = shuffle([...r.draw, ...r.recycle]);
                 r.recycle = [];
             }
+            
+            r.didFirstBid = false;
         }));
         
         if (isForceShuffle) {
@@ -954,6 +1002,7 @@
         }
         
         state.round++; 
+        state.breakawayActive = false;
         currentTeamIdx = -1;
         currentRiderIdx = -1;
         window.scrollTo(0, 0);
@@ -963,6 +1012,7 @@
     document.getElementById('btn-end-stage').onclick = () => {
         if(!confirm("End stage and reshuffle?")) return;
         state.round = 1;
+        state.breakawayActive = false;
         state.teams.forEach(t => t.riders.forEach(r => {
             let kept = [];
             if (state.mode === 'grand_tour') {
@@ -971,7 +1021,7 @@
                 kept = Array(Math.floor(count / 2)).fill(path);
             }
             r.draw = shuffle([...buildDeck(r.role), ...kept]);
-            r.recycle = []; r.discard = []; r.active = []; r.selectedIndex = null; r.finished = false;
+            r.recycle = []; r.discard = []; r.active = []; r.selectedIndex = null; r.finished = false; r.didFirstBid = false;
         }));
         currentTeamIdx = -1;
         currentRiderIdx = -1;
