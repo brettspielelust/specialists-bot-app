@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FRGT Bot-App</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QZ6XTE3D0V"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-QZ6XTE3D0V');
+</script>
+    
     <style>
         :root {
             --bg-color: #f4f4f9;
@@ -382,6 +393,26 @@
             opacity: 1;
             cursor: not-allowed;
             box-shadow: none;
+        }
+        
+        .card-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            max-width: 280px;
+            text-align: center;
+        }
+
+        .card-overlay {
+            position: absolute;
+            bottom: 12px;
+            left: 37%;
+            transform: translateX(-50%);
+            color: #33333;
+            font-size: 9px;
+            pointer-events: none;
+            white-space: nowrap;
+            z-index: 10;
         }
     </style>
 </head>
@@ -777,7 +808,13 @@
 
             const activeHtml = r.active.length > 0 ? r.active.map((path, cIdx) => {
                 const selClass = r.selectedIndex !== null ? (r.selectedIndex === cIdx ? 'selected' : 'unselected') : '';
-                return `<img src="${path}" class="card-img ${selClass}" onclick="selectCard(${currentTeamIdx}, ${currentRiderIdx}, ${cIdx})">`;
+                
+                return `
+            <div class="card-wrapper">
+            <img src="${path}" class="card-img ${selClass}" onclick="selectCard(${currentTeamIdx}, ${currentRiderIdx}, ${cIdx})">
+            <div class="card-overlay">Artwork of Flamme Rouge &copy; Lautapelit</div>
+            </div>
+`           ;
             }).join('') : '<i>Waiting to draw...</i>';
 
             const tCard = document.createElement('div');
@@ -916,7 +953,12 @@
         const r = state.teams[tIdx].riders[rIdx];
         const list = document.getElementById('modal-list');
         document.getElementById('modal-title').innerText = `Discarded: ${r.role}`;
-        list.innerHTML = r.discard.map(p => `<img src="${p}" style="width:200px; border-radius:8px;">`).join('') || '<p style="color:#666;">No cards played yet.</p>';
+        list.innerHTML = r.discard.map(p => `
+    <div class="card-wrapper" style="margin-bottom: 10px;">
+        <img src="${p}" style="width:200px; border-radius:8px; display: block; margin: 0 auto;">
+        <div class="card-overlay" style="font-size: 8px; bottom: 6px;">Artwork of Flamme Rouge &copy; Lautapelit</div>
+    </div>
+`).join('') || '<p style="color:#666;">No cards played yet.</p>';
         document.getElementById('discard-modal').style.display = 'block';
     };
 
