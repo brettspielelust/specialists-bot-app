@@ -4,19 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FRGT Bot-App</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QZ6XTE3D0V"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4CAF50">
 
-  gtag('config', 'G-QZ6XTE3D0V');
-</script>
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192x192.png">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FRGT Bots">
+    <link rel="apple-touch-icon" href="assets/icon-192x192.png">
     
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        
         :root {
             --bg-color: #f4f4f9;
             --text-color: #333;
@@ -27,393 +29,104 @@
             --info-color: #2196F3;
         }
         body {
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: 'Roboto', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
             padding: 20px;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
         h1 { margin-bottom: 5px; }
-        .sub-line {
-            color: #666;
-            margin-bottom: 25px;
-            font-size: 14px;
-        }
+        .sub-line { color: #666; margin-bottom: 25px; font-size: 14px; }
+        
         button {
-            background-color: var(--button-bg);
-            border: 1px solid #ccc;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.1s;
+            background-color: var(--button-bg); border: 1px solid #ccc;
+            padding: 10px 15px; border-radius: 4px; cursor: pointer;
+            font-size: 14px; transition: background-color 0.1s;
         }
         button:hover:not(:disabled) { background-color: var(--button-hover); }
         button:disabled { opacity: 0.5; cursor: not-allowed; }
         
         select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
+            appearance: none; -webkit-appearance: none; -moz-appearance: none;
             background-color: white;
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat;
-            background-position: right 10px top 50%;
-            background-size: 12px auto;
-            padding: 10px;
-            margin: 5px 0 15px 0;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            width: 100%;
-            box-sizing: border-box;
-            font-size: 16px;
-            cursor: pointer;
+            background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 12px auto;
+            padding: 10px; margin: 5px 0 15px 0; border-radius: 4px; border: 1px solid #ccc;
+            width: 100%; box-sizing: border-box; font-size: 16px; cursor: pointer;
         }
-        
+
+        .slider-container { margin: 20px 0 30px 0; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; }
+        .slider-label-row { display: flex; justify-content: space-between; margin-top: 10px; font-weight: bold; font-size: 14px; color: #555; }
+        input[type=range] { width: 100%; cursor: pointer; }
+
         .hidden { display: none !important; }
-        
-        .info-icon {
-            color: var(--info-color);
-            cursor: pointer;
-            font-size: 16px;
-            vertical-align: middle;
-        }
+        .info-icon { color: var(--info-color); cursor: pointer; font-size: 16px; vertical-align: middle; }
+        .header-image { width: 100%; height: auto; max-height: 200px; display: block; margin: 0 0 20px 0; object-fit: cover; border-radius: 4px; }
 
-        .header-image {
-            width: calc(100% + 40px);
-            max-width: none;
-            height: auto;
-            max-height: 200px;
-            display: block;
-            margin: -20px -20px 20px -20px;
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
-            object-fit: cover;
-        }
-
-        #setup-view {
-            background: white;
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        #dashboard-view {
-            max-width: 600px;
-            margin: 0 auto;
-        }
+        #setup-view, #dashboard-view { max-width: 600px; margin: 0 auto; }
+        #setup-view { background: white; padding: 20px; border-radius: var(--border-radius); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
         .accordion {
-            background-color: #f9f9f9;
-            color: #333;
-            cursor: pointer;
-            padding: 15px;
-            width: 100%;
-            border: 1px solid #ddd;
-            text-align: left;
-            outline: none;
-            font-size: 15px;
-            font-weight: bold;
-            border-radius: 4px;
-            transition: 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
+            background-color: #f9f9f9; color: #333; cursor: pointer; padding: 15px; width: 100%;
+            border: 1px solid #ddd; text-align: left; font-size: 15px; font-weight: bold;
+            border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
         }
-        .accordion:hover { background-color: #eef2f5; }
-        .accordion.active {
-            border-radius: 4px 4px 0 0;
-            border-bottom: none;
-            margin-bottom: 0;
-        }
+        .accordion.active { border-radius: 4px 4px 0 0; border-bottom: none; margin-bottom: 0; }
         .accordion-content {
-            padding: 0 15px;
-            background-color: white;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.2s ease-out;
-            border-radius: 0 0 4px 4px;
-            border: 1px solid #ddd;
-            border-top: none;
-            margin-bottom: 15px;
+            padding: 0 15px; background-color: white; max-height: 0; overflow: hidden;
+            transition: max-height 0.25s ease-out; border-radius: 0 0 4px 4px; margin-bottom: 15px;
         }
-        .accordion-content.active {
-            border-top: 1px solid #eee;
-        }
-        .accordion-content p {
-            font-size: 14px;
-            line-height: 1.5;
-            color: #444;
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
+        .accordion-content.active { border: 1px solid #ddd; border-top: 1px solid #eee; }
+        .accordion-content p { font-size: 14px; line-height: 1.5; color: #444; margin-top: 15px; margin-bottom: 15px; }
 
-        .team-setup {
-            border-top: 2px solid #eee;
-            padding-top: 15px;
-            margin-top: 15px;
-        }
+        .team-setup { border-top: 2px solid #eee; padding-top: 15px; margin-top: 15px; }
+        .top-bar { background: white; padding: 15px 20px; border-radius: var(--border-radius); margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
+        .instruction-text { text-align: center; color: #555; font-size: 15px; margin-bottom: 15px; font-weight: bold; }
 
-        .top-bar {
-            background: white;
-            padding: 15px 20px;
-            border-radius: var(--border-radius);
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        
-        .instruction-text {
-            text-align: center;
-            color: #555;
-            font-size: 15px;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        .rider-nav-bar {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .nav-column {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        .rider-nav-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .nav-column { display: flex; flex-direction: column; gap: 10px; }
         .nav-btn {
-            background: white;
-            border: 2px solid transparent;
-            border-radius: var(--border-radius);
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            font-weight: bold;
-            color: #444;
-            transition: all 0.2s;
-            width: 100%;
-            box-sizing: border-box;
+            background: white; border: 2px solid transparent; border-radius: var(--border-radius);
+            padding: 10px 15px; display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-weight: bold; color: #444; width: 100%; box-sizing: border-box;
         }
-        .nav-btn.active {
-            border-color: var(--highlight-color);
-            background: #f0fdf4;
-            transform: scale(1.02);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        .nav-btn i.ready-icon {
-            color: #4CAF50;
-            font-size: 18px;
-            margin-left: auto;
-        }
+        .nav-btn.active { border-color: var(--highlight-color); background: #f0fdf4; box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .nav-btn i.ready-icon { color: #4CAF50; font-size: 18px; margin-left: auto; }
 
-        .team-card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            border-left: 12px solid gray;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .rider {
-            background: transparent;
-            border: none;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .card-display {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin: 15px 0;
-            min-height: 300px;
-            background: #f0f0f0;
-            padding: 15px;
-            border-radius: 4px;
-            align-items: center;
-            justify-content: center;
-            border: 1px dashed #ccc;
-        }
-        .card-img {
-            width: 100%;
-            max-width: 280px;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            border: 5px solid transparent;
-            transition: transform 0.2s;
-        }
-        .card-img.selected { border-color: var(--highlight-color); transform: scale(1.02); }
-        .card-img.unselected { opacity: 0.4; filter: grayscale(100%); }
-        
+        .team-card { background: white; border-radius: var(--border-radius); padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-left: 12px solid gray; }
+        .card-display { display: flex; flex-direction: row; margin: 15px 0; background: #f0f0f0; padding: 15px; border-radius: 4px; align-items: flex-start; justify-content: center; overflow: visible; min-height: 250px; }
+        .card-wrapper { position: relative; flex: 0 1 62%; max-width: 320px; text-align: center; transition: z-index 0.2s ease; }
+        .card-wrapper + .card-wrapper { margin-left: -24%; margin-top: 25px; }
+        .bot-card-canvas { width: 100%; height: auto; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); border: 2px solid #777; display: block; transition: transform 0.2s, filter 0.2s, border-color 0.2s, border-width 0.2s; box-sizing: border-box; }
+        .bot-card-canvas.selected { border-color: var(--highlight-color); border-width: 4px; transform: scale(1.02); opacity: 1; filter: none; }
+        .bot-card-canvas.unselected { opacity: 1; filter: none; }
+
         .stats { font-size: 13px; color: #777; text-transform: uppercase; }
         .clickable-stat { color: var(--info-color); text-decoration: underline; cursor: pointer; font-weight: bold; }
-        
-        .action-area {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 100%;
-            margin-top: auto;
-        }
-        .action-row-top, .action-row-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .draw-controls { display: flex; gap: 5px; }
-        .exh-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-left: auto;
-        }
-        .exh-controls {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background: #ffebee;
-            padding: 5px 10px;
-            border-radius: 4px;
-            border: 1px solid #ffcdd2;
-        }
-        .exh-controls button {
-            padding: 5px 10px;
-            margin: 0;
-            background: white;
-            border-color: #ffcdd2;
-            font-weight: bold;
-        }
-        .btn-done {
-            background-color: var(--highlight-color);
-            color: white;
-            font-weight: bold;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            margin-left: auto;
-        }
-        
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            user-select: none;
-            font-size: 15px;
-        }
-        .checkbox-label input {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            margin: 0;
-        }
 
-        .exh-phase-panel {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            border: 2px solid #FF9800;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .exh-phase-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .exh-phase-row:last-child { border-bottom: none; }
-        .exh-phase-row-label {
-            font-weight: bold;
-            padding-left: 10px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            overflow-y: auto;
-        }
-        .modal-content {
-            background-color: #fff;
-            margin: 10% auto;
-            padding: 20px;
-            border-radius: var(--border-radius);
-            width: 85%;
-            max-width: 380px;
-            position: relative;
-        }
-        .close-modal {
-            position: absolute;
-            right: 15px; top: 10px;
-            font-size: 28px; font-weight: bold; cursor: pointer; color: #aaa;
-        }
+        .exh-controls { display: flex; align-items: center; gap: 5px; background: #ffebee; padding: 5px 10px; border-radius: 4px; border: 1px solid #ffcdd2; }
+        .exh-controls button { padding: 5px 10px; margin: 0; background: white; border-color: #ffcdd2; font-weight: bold; }
+        .exh-phase-panel { background: white; border-radius: var(--border-radius); padding: 20px; margin-bottom: 20px; border: 2px solid #FF9800; }
+        .exh-phase-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+        
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); overflow-y: auto; }
+        .modal-content { background-color: #fff; margin: 10% auto; padding: 20px; border-radius: var(--border-radius); width: 85%; max-width: 420px; position: relative; }
+        .close-modal { position: absolute; right: 15px; top: 10px; font-size: 28px; font-weight: bold; cursor: pointer; color: #aaa; }
 
         #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
-        .toast {
-            background: #333; color: white; padding: 12px 20px;
-            border-radius: 4px; margin-top: 10px; animation: toast-in 0.3s forwards;
-        }
+        .toast { background: #333; color: white; padding: 12px 20px; border-radius: 4px; margin-top: 10px; animation: toast-in 0.3s forwards; }
         @keyframes toast-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        .bottom-controls { margin-top: 30px; display: flex; flex-direction: column; gap: 15px; }
-        .btn-primary {
-            background: var(--highlight-color); color: white;
-            font-size: 20px; font-weight: bold; padding: 20px; border: none; border-radius: 4px;
-        }
-        .btn-primary:disabled {
-            background: #bdbdbd;
-            color: #757575;
-            opacity: 1;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
+        .btn-primary { background: var(--highlight-color); color: white; font-size: 20px; font-weight: bold; padding: 20px; border: none; border-radius: 4px; width: 100%; margin-top: 20px;}
         
-        .card-wrapper {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-            max-width: 280px;
-            text-align: center;
-        }
+        .action-area { display: flex; flex-direction: column; gap: 15px; width: 100%; margin-top: auto; }
+        .action-row-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .action-row-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; width: 100%; margin-top: 5px; }
 
-        .card-overlay {
-            position: absolute;
-            bottom: 12px;
-            left: 37%;
-            transform: translateX(-50%);
-            color: #33333;
-            font-size: 9px;
-            pointer-events: none;
-            white-space: nowrap;
-            z-index: 10;
-        }
+        .breakaway-row { display: flex; align-items: center; justify-content: space-between; padding: 15px; background: #f9f9f9; margin-bottom: 10px; border-radius: 4px; border: 1px solid #eee; }
+        .breakaway-row.winner { border-color: #4CAF50; background: #e8f5e9; }
+        .breakaway-cb { transform: scale(1.5); margin-right: 15px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -422,52 +135,54 @@
 
 <div class="container">
     <div id="setup-view">
-        <img src="assets/header.webp" alt="Specialist Riders App Header" class="header-image" onerror="this.style.display='none'">
+        <img src="assets/header.webp" alt="Header" class="header-image" onerror="this.style.display='none'">
+        <div class="sub-line">This is an unofficial fan-made Flamme Rouge Companion App to play a Single Race or Grand Tour with Specialist Riders (Bots). Have fun!</div>
         
-        <div class="sub-line">
-            Unofficial fan-made Flamme Rouge App to play a Single Race or Grand Tour with Specialist Riders (Bots).
-        </div>
-        
-        <label>Race Mode <i class="bi bi-info-circle info-icon" style="margin-left:8px;" onclick="showHelp('raceMode')"></i></label>
+        <label>Race Mode <i class="bi bi-info-circle info-icon" onclick="showHelp('raceMode')"></i></label>
         <select id="raceMode">
-            <option value="" disabled selected></option>
+            <option value="" disabled selected>Select...</option>
             <option value="single">Single Race</option>
             <option value="grand_tour">Grand Tour</option>
         </select>
 
-        <label>Number of Bot Teams <i class="bi bi-info-circle info-icon" style="margin-left:8px;" onclick="showHelp('botTeams')"></i></label>
+        <div class="slider-container">
+            <label style="display: block; margin-bottom: 10px;">
+                Choose Difficulty: <i class="bi bi-info-circle info-icon" onclick="showHelp('difficulty')"></i>
+            </label>
+            <input type="range" id="difficultySlider" min="0" max="2" value="1" step="1">
+            <div class="slider-label-row">
+                <span>Easy</span>
+                <span>Medium</span>
+                <span>Hard</span>
+            </div>
+        </div>
+
+        <label>Number of Bot Teams <i class="bi bi-info-circle info-icon" onclick="showHelp('botTeams')"></i></label>
         <select id="teamCount">
-            <option value="" disabled selected></option>
-            <option value="1">1</option><option value="2">2</option>
-            <option value="3">3</option><option value="4">4</option><option value="5">5</option>
+            <option value="" disabled selected>Select...</option>
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
         </select>
 
         <div id="teams-container"></div>
-
-        <div id="setup-error" style="color: #d32f2f; font-weight: bold; margin-bottom: 0px; text-align: center; min-height: 20px;"></div>
+        <div id="setup-error" style="color: #d32f2f; font-weight: bold; text-align: center; min-height: 25px; margin: 10px 0;"></div>
         
         <button id="btn-start" style="width: 100%; background: #4CAF50; color: white; padding: 15px; font-weight: bold; border: none; font-size: 16px;">START RACE</button>
         <button id="btn-resume" class="hidden" style="width: 100%; background: #2196F3; color: white; padding: 15px; margin-top: 10px; border: none; font-weight: bold;">RESUME SAVED GAME</button>
         
         <div style="margin-top: 30px;"></div>
         
-        <button type="button" class="accordion" onclick="toggleAccordion(this)">
-            About this project <i class="bi bi-chevron-down"></i>
-        </button>
+        <button type="button" class="accordion" onclick="toggleAccordion(this)">About this project <i class="bi bi-chevron-down"></i></button>
         <div class="accordion-content">
             <p><em>Disclaimer: This is an unofficial, fan-made web app intended strictly for private, non-commercial use. I am not commercially associated with the game's author or publisher. All credits for the Flamme Rouge board game belong to designer Asger Aleksandrov Granerud and publisher Lautapelit.</em></p>
             <p>This web app is based on a fan-made <a href="https://boardgamegeek.com/filepage/288985/flamme-rouge-grand-tour-solo-rules" target="_blank" style="color: #2196F3;">solo version published on BoardGameGeek</a> by Fredrik Stahre. Fredrik's aim was to make the Flamme Rouge Bots use all the new rules included in the Grand Tour expansion (specialist powers).</p>
             <p>Since playing this solo variant requires printing and cutting out a lot of cards, taking up table space and adding administrative overhead, I developed this app. It digitally simulates the drawing and playing of Energy Cards for Specialist Riders (Bots), allowing you to compete against up to five teams. In addition to a Single Race, you can play a Grand Tour (where half of each Bot's Exhaustion Cards are carried over to the next stage).</p>
-            <p><strong>Please note:</strong> This app uses your browser's local storage so you can resume your game later (no login is required, and no data is saved to external databases!). The code for this app is licensed under Creative Commons and is <a href="https://github.com/brettspielelust/specialists-bot-app/blob/main/index.html" target="_blank" style="color: #2196F3;">available on GitHub</a>. Feel free to adopt or enhance this project.</p>
-            <p>App author:<br>
-            Oliver Baentsch<br>
-            <a href="https://www.brettspielelust.de" target="_blank" style="color: #2196F3;">Brettspielelust</a><br>
-            oliver [at] brettspielelust.de</p>
+            <p><strong>Please note:</strong> This app uses your browser's local storage so you can resume your game later (no login is required, and no data is saved to external databases!). The code for this app is licensed under Creative Commons and is available on <a href="https://github.com/oliverbaentsch/specialist-riders-app" target="_blank" style="color: #2196F3;">GitHub</a>. Feel free to adopt or enhance this project.</p>
+            
+            <p>App author:<br>Oliver Baentsch<br><a href="https://www.brettspielelust.de" target="_blank" style="color: #2196F3;">Brettspielelust</a><br>oliver [at] brettspielelust.de</p>
+            <p>All photos made with AI support: Google Gemeni/OpenAI</p>
         </div>
         
-        <button type="button" class="accordion" onclick="toggleAccordion(this)">
-            How to use this app <i class="bi bi-chevron-down"></i>
-        </button>
+        <button type="button" class="accordion" onclick="toggleAccordion(this)">How to use this app <i class="bi bi-chevron-down"></i></button>
         <div class="accordion-content">
             <p>On the setup screen, choose whether you want to ride a Single Race or embark on a multi-stage Grand Tour.</p>
             <p>Next, select the number of competing Bot Teams. Assign a color to each team and recruit their Specialist Riders. Every team must consist of exactly one Rouleur and one Sprinteur. You may recruit the same Specialist type across multiple teams.</p>
@@ -475,32 +190,73 @@
             <p>During the race, select a Rider in turn order (starting from the front of the peloton) to open their action panel. Click <strong>"Draw Card"</strong> to reveal their Energy Card, and decide if a second card is required <a href="/specialist-bots/rules.html" target="_blank" style="color: #2196F3;">according to the rules.</a>.</p>
             <p>Resolve all Bots in turn order. At the end of the round, distribute Exhaustion Cards to the affected Riders before proceeding to the next round.</p>
             <p><a href="/specialist-bots/rules.html" target="_blank" style="color: #2196F3;">Flamme Rouge Solo Rules for Specialist Bots</a></p>
+            <p><b>How to save this app to your Home Screen: </b>(iOS // Tap share button at the bottom of the screen. Scroll down the menu and tap "Add to Home Screen". Android // Tap menu icon in the top right corner of the browser.Tap "Add to Home screen".) <br />The app will automatically create a custom app icon on your home screen.</p>
         </div>
+        
+        <button type="button" class="accordion" onclick="toggleAccordion(this)">Version 2.0.2 | Changelog <i class="bi bi-chevron-down"></i></button>
+<div class="accordion-content">
+    <div style="color: #333; margin-top: 15px; font-weight: bold;">May 16th, 2026</div>
+    <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
+        <li>New Header and App Icon implemented.</li>
+        </ul>
+    <div style="color: #333; margin-top: 15px; font-weight: bold;">May 15th, 2026</div>
+    <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
+        <li>Bugfix: "Race finished" flag is now fully persistent across subsequent rounds, properly locking the rider. Removed unintended reset logic.</li>
+        <li>Design: Card values are now right-aligned to prevent wider strings (like '11R') from overlapping the white box border.</li>
+        <li>Layout: Checkboxes for "Force shuffling" and "Refresh Phase" at the end of a round now use a stable flexbox layout to prevent overlapping.</li>
+        <li>Design: Thicker green outline for selected energy cards to improve visual hierarchy.</li>
+        <li>Feature: Redesigned the "Optional selection" area in the round-end panel. The "Refresh Phase" is now seamlessly integrated into the round transition, including toast notifications.</li>
+        <li>Bugfix: Restored toast notifications for auto-reshuffling empty decks and manual round reshuffles.</li>
+        <li>Feature: Added detection for fully exhausted riders. Riders with no remaining cards are marked "Exhausted!" in the dashboard and do not block round progression.</li>
+        <li>Design: Removed grayscale filter from unselected cards. All drawn cards are rendered in full color, with the selected card dynamically brought to the front.</li>
+        <li>Feature: Implemented Dynamic Breakaway Resolution including sequential bidding and an interactive ranking modal to accurately route winning bids to the discard pile and losing bids to the recycle pile.</li>
+        <li>Feature: Added a Difficulty Slider (Easy, Medium, Hard) to adjust bot deck strengths.</li>
+    </ul>
 
-        <button type="button" class="accordion" onclick="toggleAccordion(this)">
-            Version 1.2.1 | Changelog <i class="bi bi-chevron-down"></i>
-        </button>
-        <div class="accordion-content">
-            <div style="color: #333; margin-top: 15px; font-weight: bold;">April 22nd, 2026</div>
-            <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
-                <li>New Feature: Implemented optional Breakaway Phase logic exclusively for Round 1. Includes a toggle to restrict actions to exactly one rider per team.</li>
-                <li>New Feature: Added a specific "Second Bid" button to the rider panel during Breakaways, allowing seamless logging of the first bid and drawing for a second bid.</li>
-            </ul>
-            <div style="color: #333; margin-top: 15px; font-weight: bold;">April 21st, 2026</div>
-            <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
-                <li>New Feature: Added "Force shuffling of Riders Cards" checkbox. Selecting this option before proceeding to the next round merges and shuffles all riders' Draw and Recycle piles.</li>
-            </ul>
-            <div style="color: #333; margin-top: 15px; font-weight: bold;">April 20th, 2026</div>
-            <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
-                <li>Critical Bugfix: Removed a legacy script reference to the deleted `changelog-container` that caused a fatal crash (White Screen of Death) when clicking "Start Race" or "Resume Saved Game".</li>
-                <li>Refactoring: Removed the padding workaround for inconsistent filenames. All image requests now strictly enforce a two-digit format with leading zeros (e.g., _01.webp). Requires server-side filename standardization.</li>
-                <li>Bugfix: Removed custom styling on dropdown menus to fix a WebKit bug that made dynamically injected selection fields unclickable on mobile devices. Dropdowns now use reliable native OS rendering.</li>
-                <li>Save State Wipe: Bumped the save-game variable to v8 to clear corrupted decks from your local storage.</li>
-                <li>Dynamic Deck Sizes: Refactored the internal configuration to support individual deck sizes (14 or 15 cards).</li>
-                <li>Content Expansion: Added six new Specialist Riders to the database.</li>
-                <li>Layout Fix: Corrected the order of elements on the setup screen. The Dropdowns and Start button are now at the top, immediately following the intro.</li>
-            </ul>
-        </div>
+    <div style="color: #333; margin-top: 15px; font-weight: bold;">April 22nd, 2026</div>
+    <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
+        <li>New Feature: Implemented optional Breakaway Phase logic exclusively for Round 1. Includes a toggle to restrict actions to exactly one rider per team.</li>
+        <li>New Feature: Added a specific "Second Bid" button to the rider panel during Breakaways, allowing seamless logging of the first bid and drawing for a second bid.</li>
+    </ul>
+
+    <div style="color: #333; margin-top: 15px; font-weight: bold;">April 21st, 2026</div>
+    <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
+        <li>New Feature: Added "Force shuffling of Riders Cards" checkbox. Selecting this option before proceeding to the next round merges and shuffles all riders' Draw and Recycle piles.</li>
+    </ul>
+
+    <div style="color: #333; margin-top: 15px; font-weight: bold;">April 20th, 2026</div>
+    <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
+        <li>Critical Bugfix: Removed a legacy script reference to the deleted `changelog-container` that caused a fatal crash (White Screen of Death) when clicking "Start Race" or "Resume Saved Game".</li>
+        <li>Refactoring: Removed the padding workaround for inconsistent filenames. All image requests now strictly enforce a two-digit format with leading zeros (e.g., _01.webp). Requires server-side filename standardization.</li>
+        <li>Bugfix: Removed custom styling on dropdown menus to fix a WebKit bug that made dynamically injected selection fields unclickable on mobile devices. Dropdowns now use reliable native OS rendering.</li>
+        <li>Save State Wipe: Bumped the save-game variable to v8 to clear corrupted decks from your local storage.</li>
+        <li>Dynamic Deck Sizes: Refactored the internal configuration to support individual deck sizes (14 or 15 cards).</li>
+        <li>Content Expansion: Added six new Specialist Riders to the database.</li>
+        <li>Layout Fix: Corrected the order of elements on the setup screen. The Dropdowns and Start button are now at the top, immediately following the intro.</li>
+    </ul>
+
+    <div style="color: #333; margin-top: 15px; font-weight: bold;">April 19th, 2026</div>
+    <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
+        <li>Bugfix: Escaped HTML tags in the changelog text that previously broke the DOM parser and prevented Javascript (like the Modals) from executing.</li>
+        <li>Dashboard Layout Update: Constrained the dashboard view to a maximum width of 600px to perfectly match the boxed desktop layout of the setup screen.</li>
+        <li>UI Restructuring: Rearranged the start page layout, moving accordions below the Start button and merging the Changelog into the third accordion.</li>
+    </ul>
+
+    <div style="color: #333; margin-top: 15px; font-weight: bold;">April 18th, 2026</div>
+    <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
+        <li>Sequential Wizard Flow: Replaced the scrolling dashboard with a focused, one-rider-at-a-time view. Navigation buttons are now auto-sorted by role.</li>
+        <li>End-of-Round Exhaustion: Added a centralized panel at the end of the round to distribute Exhaustion Cards efficiently all at once.</li>
+        <li>"Race Finished" Option: Added a checkbox for riders who cross the finish line, excluding them from future rounds and marking them with a flag icon.</li>
+    </ul>
+
+    <div style="color: #333; margin-top: 15px; font-weight: bold;">April 17th, 2026</div>
+    <ul style="margin-top: 5px; padding-left: 20px; margin-bottom: 15px; font-size: 14px; color: #444;">
+        <li>Inline Setup Validation: Replaced intrusive browser alert pop-ups with clean, inline error messages during team setup.</li>
+        <li>Responsive UI: The header image now scales correctly on mobile devices, and all info modals close reliably when clicking the dark background.</li>
+        <li>In-App Help System: Integrated clickable info icons next to key elements and added an expandable "How to use" accordion on the start screen.</li>
+    </ul>
+</div>
+
     </div>
 
     <div id="dashboard-view" class="hidden">
@@ -508,90 +264,378 @@
             <h2 id="round-display" style="margin: 0; font-size: 28px;">Round 1</h2>
             <div id="mode-display" style="font-size: 14px; color: #666; margin-top: 5px;"></div>
         </div>
-        
-        <div class="instruction-text">Choose Rider to draw their Energy Card(s), starting with the frontmost Rider.</div>
-        <div id="breakaway-toggle-container"></div>
+        <div class="instruction-text" id="main-instruction">Choose Rider to draw their Energy Card(s).</div>
+        <div id="round-one-options-container"></div>
         <div id="rider-nav" class="rider-nav-bar"></div>
         <div id="game-board"></div>
-        
-        <div class="bottom-controls">
-            <button id="btn-next-turn" class="btn-primary"></button>
-            <div style="display:flex; gap:10px;">
-                <button id="btn-end-stage" style="flex:1; background:#FF9800; color:white; border:none; padding:15px; font-weight:bold; border-radius:4px;">End Stage</button>
-                <button id="btn-reset" style="flex:1; background:#F44336; color:white; border:none; padding:15px; font-weight:bold; border-radius:4px;">Reset Game</button>
-            </div>
+        <button id="btn-next-turn" class="btn-primary"></button>
+        <div style="display:flex; gap:10px; margin-top: 10px;">
+            <button id="btn-end-stage" style="flex:1; background:#FF9800; color:white; border:none; padding:15px; font-weight:bold; border-radius:4px;">End Stage</button>
+            <button id="btn-reset" style="flex:1; background:#F44336; color:white; border:none; padding:15px; font-weight:bold; border-radius:4px;">Reset Game</button>
         </div>
     </div>
 </div>
 
 <div id="discard-modal" class="modal" onclick="if(event.target === this) closeModal('discard-modal')">
-    <div class="modal-content"><span class="close-modal" onclick="closeModal('discard-modal')">&times;</span><h2 id="modal-title"></h2><div id="modal-list" style="display:flex; flex-direction:column; gap:10px; align-items:center;"></div></div>
+    <div class="modal-content"><span class="close-modal" onclick="closeModal('discard-modal')">&times;</span><h2 id="modal-title"></h2><div id="modal-list"></div></div>
+</div>
+
+<div id="breakaway-modal" class="modal" style="background-color: rgba(0,0,0,0.9);" onclick="if(event.target === this) closeModal('breakaway-modal')">
+    <div class="modal-content" style="max-width: 500px;">
+        <h2 style="margin-top:0; color:#FF9800; border-bottom:2px solid #eee; padding-bottom:10px;">Breakaway Resolution</h2>
+        <p style="font-size:14px; color:#555;">Select <b>max. 2 Riders</b> to break away. Their bid cards go to Discard, all other cards go to Recycle.</p>
+        <div id="breakaway-list"></div>
+        <button onclick="finalizeBreakaway()" style="width:100%; background:#4CAF50; color:white; font-size:18px; font-weight:bold; padding:15px; border:none; border-radius:4px; margin-top:15px;">Confirm Breakaway</button>
+    </div>
 </div>
 
 <div id="help-modal" class="modal" onclick="if(event.target === this) closeModal('help-modal')">
-    <div class="modal-content"><span class="close-modal" onclick="closeModal('help-modal')">&times;</span><h2 id="help-title" style="margin-top: 0;">Help</h2><div id="help-text" style="line-height:1.6; font-size: 15px; color: #444;"></div></div>
+    <div class="modal-content"><span class="close-modal" onclick="closeModal('help-modal')">&times;</span><h2 id="help-title">Help</h2><div id="help-text"></div></div>
 </div>
 
 <script>
     const roles = {
-        'Squirrel (Sprinteur)': { prefix: 'squirrel', count: 15 },
-        'Domestike (Rouleur)': { prefix: 'domestike', count: 15 },
-        'Baroudeur (Rouleur)': { prefix: 'baroudeur', count: 15 },
-        'Flandrien (Rouleur)': { prefix: 'flandrien', count: 15 },
-        'Polyvalent (Sprinteur)': { prefix: 'polyvalent', count: 15 },
-        'Descender (Sprinteur)': { prefix: 'descender', count: 15 },
-        'Flahute (Sprinteur)': { prefix: 'flahute', count: 15 },
-        'Grimpeur (Rouleur)': { prefix: 'grimpeur', count: 15 },
-        'Mountaineer (Sprinteur)': { prefix: 'mountaineer', count: 14 },
-        'Super Rouleur (Rouleur)': { prefix: 'superrouleur', count: 15 },
-        'Super Sprinteur (Sprinteur)': { prefix: 'supersprinteur', count: 14 },
-        'Puncheur (Rouleur)': { prefix: 'puncheur', count: 14 }
+        'Baroudeur (Rouleur)': { prefix: 'rouleur_blanko' },
+        'Domestike (Rouleur)': { prefix: 'rouleur_blanko' },
+        'Flandrien (Rouleur)': { prefix: 'rouleur_blanko' },
+        'Grimpeur (Rouleur)': { prefix: 'rouleur_blanko' },
+        'Puncheur (Rouleur)': { prefix: 'rouleur_blanko' },
+        'Super Rouleur (Rouleur)': { prefix: 'rouleur_blanko' },
+        'Descender (Sprinteur)': { prefix: 'sprinteur_blanko' },
+        'Flahute (Sprinteur)': { prefix: 'sprinteur_blanko' },
+        'Mountaineer (Sprinteur)': { prefix: 'sprinteur_blanko' },
+        'Polyvalent (Sprinteur)': { prefix: 'sprinteur_blanko' },
+        'Squirrel (Sprinteur)': { prefix: 'sprinteur_blanko' },
+        'Super Sprinteur (Sprinteur)': { prefix: 'sprinteur_blanko' }
     };
     
-    const helpTexts = {
-        'raceMode': {
-            title: 'Race Mode',
-            text: 'Choose the kind of race you like to start. A Single Race resets everything after the finish. A Grand Tour keeps half of your Exhaustion Cards for the next stage.'
+    const colors = ['White', 'Black', 'Blue', 'Green', 'Pink', 'Red'];
+
+    // --- BASE DATA (EASY LEVEL ORIGINAL VALUES) ---
+    const dataBaroudeur = [
+        { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" },
+        { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" },
+        { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5", specialText: "Don't receive Exhaustion.\nDon't give slipstream." },
+        { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5" }, { flat: "6", uphill: "5", supply: "6", downhill: "6Y", breakaway: "6Y", specialText: "Don't receive Exhaustion.\nDon't give slipstream." },
+        { flat: "6", uphill: "5", supply: "6", downhill: "6Y", breakaway: "6Y", specialText: "Don't receive Exhaustion.\nDon't give slipstream." }, { flat: "6", uphill: "5", supply: "6", downhill: "6Y", breakaway: "6Y" },
+        { flat: "7", uphill: "5R", supply: "7", downhill: "7", breakaway: "7R" }, { flat: "7", uphill: "5R", supply: "7", downhill: "7", breakaway: "7R" },
+        { flat: "7", uphill: "5R", supply: "7", downhill: "7", breakaway: "7R", specialText: "Don't receive Exhaustion.\nDon't give slipstream." }, { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5" }, { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5" }
+    ];
+    const dataDomestike = [
+        { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" },
+        { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4", specialText: "Return one recycled\nEnergy Card." }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4", specialText: "Return one recycled\nEnergy Card." }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4", specialText: "Return one recycled\nEnergy Card." },
+        { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5" }, { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5" }, { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5" },
+        { flat: "6", uphill: "5", supply: "6", downhill: "6Y", breakaway: "6Y" }, { flat: "6", uphill: "5", supply: "6", downhill: "6Y", breakaway: "6Y" }, { flat: "6", uphill: "5", supply: "6", downhill: "6Y", breakaway: "6Y" },
+        { flat: "7", uphill: "5R", supply: "7", downhill: "7", breakaway: "7R" }, { flat: "7", uphill: "5R", supply: "7", downhill: "7", breakaway: "7R" }, { flat: "7", uphill: "5R", supply: "7", downhill: "7", breakaway: "7R" }
+    ];
+    const dataFlandrien = [
+        { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3", specialText: "+1 move extra\nSlipstream if possible" },
+        { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4", specialText: "+1 move extra\nSlipstream if possible" },
+        { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5" }, { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5" }, { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5", specialText: "+1 move extra\nSlipstream if possible" },
+        { flat: "6", uphill: "5", supply: "6", downhill: "6Y", breakaway: "6Y" }, { flat: "6", uphill: "5", supply: "6", downhill: "6Y", breakaway: "6Y" }, { flat: "6", uphill: "5", supply: "6", downhill: "6Y", breakaway: "6Y", specialText: "+1 move extra\nSlipstream if possible" },
+        { flat: "7", uphill: "5R", supply: "7", downhill: "7", breakaway: "7R" }, { flat: "7", uphill: "5R", supply: "7", downhill: "7", breakaway: "7R" }, { flat: "7", uphill: "5R", supply: "7", downhill: "7", breakaway: "7R", specialText: "+1 move extra\nSlipstream if possible" }
+    ];
+    const dataGrimpeur = [
+        { flat: "3R", uphill: "3Y", supply: "4", downhill: "7", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "7", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "7", breakaway: "3" },
+        { flat: "4Y", uphill: "4", supply: "4", downhill: "5Y*", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4", downhill: "5Y*", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4", downhill: "5Y*", breakaway: "4" },
+        { flat: "5", uphill: "5", supply: "5Y", downhill: "5R*", breakaway: "5" }, { flat: "5", uphill: "5", supply: "5Y", downhill: "5R*", breakaway: "5" }, { flat: "5", uphill: "5", supply: "5Y", downhill: "5R*", breakaway: "5" },
+        { flat: "6", uphill: "6", supply: "6R", downhill: "6R", breakaway: "6Y", specialText: "Uphill Limit is 6." }, { flat: "6", uphill: "6", supply: "6R", downhill: "6R", breakaway: "6Y", specialText: "Uphill Limit is 6." }, { flat: "6", uphill: "6", supply: "6R", downhill: "6R", breakaway: "6Y", specialText: "Uphill Limit is 6." },
+        { flat: "7", uphill: "5R", supply: "7", downhill: "7Y", breakaway: "7R" }, { flat: "7", uphill: "5R", supply: "7", downhill: "7Y", breakaway: "7R" }, { flat: "7", uphill: "5R", supply: "7", downhill: "7Y", breakaway: "7R" }
+    ];
+    const dataPuncheur = [
+        { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" },
+        { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5" },
+        { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5" }, { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5" }, { flat: "6", uphill: "5", supply: "6", downhill: "6Y", breakaway: "6Y" },
+        { flat: "6", uphill: "5", supply: "6", downhill: "6Y", breakaway: "6Y" }, { flat: "8", uphill: "5R", supply: "8", downhill: "8", breakaway: "8R", specialText: "Do not retrieve\nan Exhaustion Card this round." }, { flat: "7", uphill: "5R*", supply: "7", downhill: "7", breakaway: "7R*" }, { flat: "7", uphill: "5R*", supply: "7", downhill: "7", breakaway: "7R*" }, { flat: "7", uphill: "5R*", supply: "7", downhill: "7", breakaway: "7R*" }
+    ];
+    const dataSuperRouleur = [
+        { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" },
+        { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" },
+        { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5" }, { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5", specialText: "Cannot be blocked. Place\non rightmost space." }, { flat: "5", uphill: "5", supply: "5Y", downhill: "5R", breakaway: "5", specialText: "Cannot be blocked. Place\non rightmost space." },
+        { flat: "6", uphill: "5", supply: "6", downhill: "6Y", breakaway: "6Y" }, { flat: "6", uphill: "5", supply: "6", downhill: "6Y", breakaway: "6Y", specialText: "Cannot be blocked. Place\non rightmost space." }, { flat: "6", uphill: "5", supply: "6", downhill: "6Y", breakaway: "6Y", specialText: "Cannot be blocked. Place\non rightmost space." },
+        { flat: "7", uphill: "5R", supply: "7", downhill: "7", breakaway: "7R" }, { flat: "7", uphill: "5R", supply: "7", downhill: "7", breakaway: "7R" }, { flat: "7", uphill: "5R", supply: "7", downhill: "7", breakaway: "7R" }
+    ];
+    const dataDescender = [
+        { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" },
+        { flat: "3Y", uphill: "3", supply: "4", downhill: "7", breakaway: "3", specialText: "Return one recycled\nExhaustion Card." }, { flat: "3Y", uphill: "3", supply: "4", downhill: "7", breakaway: "3", specialText: "Return one recycled\nExhaustion Card." }, { flat: "3Y", uphill: "3", supply: "4", downhill: "7", breakaway: "3", specialText: "Return one recycled\nExhaustion Card." },
+        { flat: "4", uphill: "4", supply: "4Y", downhill: "5Y", breakaway: "4" }, { flat: "4", uphill: "4", supply: "4Y", downhill: "5Y", breakaway: "4" }, { flat: "5", uphill: "5", supply: "5R*", downhill: "5R*", breakaway: "5Y*" },
+        { flat: "5", uphill: "5", supply: "5R*", downhill: "5R*", breakaway: "5Y*" }, { flat: "5", uphill: "5", supply: "5R*", downhill: "5R*", breakaway: "5Y*" }, { flat: "5", uphill: "5", supply: "5R", downhill: "5R", breakaway: "5R*" },
+        { flat: "9", uphill: "5R", supply: "9", downhill: "9", breakaway: "9Y" }, { flat: "9", uphill: "5R", supply: "9", downhill: "9", breakaway: "9Y" }, { flat: "9", uphill: "5R", supply: "9", downhill: "9", breakaway: "9R" }
+    ];
+    const dataFlahute = [
+        { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" },
+        { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" },
+        { flat: "4", uphill: "4", supply: "4Y", downhill: "5Y", breakaway: "4" }, { flat: "4", uphill: "4", supply: "4Y", downhill: "5Y", breakaway: "4" }, { flat: "5", uphill: "5", supply: "5R*", downhill: "5R*", breakaway: "5Y*" },
+        { flat: "5", uphill: "5", supply: "5R*", downhill: "5R*", breakaway: "5Y*" }, { flat: "5", uphill: "5", supply: "5R*", downhill: "5R*", breakaway: "5Y*" }, { flat: "5", uphill: "5", supply: "5R", downhill: "5R", breakaway: "5R*", specialText: "Cannot be blocked. Place\non rightmost space." },
+        { flat: "9", uphill: "5R", supply: "9", downhill: "9", breakaway: "9Y" }, { flat: "9", uphill: "5R", supply: "9", downhill: "9", breakaway: "9Y", specialText: "Cannot be blocked. Place\non rightmost space." }, { flat: "9", uphill: "5R", supply: "9", downhill: "9", breakaway: "9R", specialText: "Cannot be blocked. Place\non rightmost space." }
+    ];
+    const dataMountaineer = [
+        { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "3Y*", uphill: "3Y*", supply: "4", downhill: "5", breakaway: "3" },
+        { flat: "3Y*", uphill: "3Y*", supply: "4", downhill: "5", breakaway: "3" }, { flat: "4", uphill: "4", supply: "4", downhill: "5", breakaway: "4" }, { flat: "4", uphill: "4", supply: "4", downhill: "5", breakaway: "4" },
+        { flat: "4", uphill: "4", supply: "4", downhill: "5", breakaway: "4" }, { flat: "4", uphill: "4", supply: "4", downhill: "5", breakaway: "4" }, { flat: "5", uphill: "5", supply: "5R*", downhill: "5R*", breakaway: "5Y*" },
+        { flat: "5", uphill: "5", supply: "5R*", downhill: "5R*", breakaway: "5Y*" }, { flat: "7Y", uphill: "7", supply: "7R", downhill: "7R", breakaway: "7R", specialText: "Uphill Limit is 7." }, { flat: "7Y", uphill: "7", supply: "7R", downhill: "7R", breakaway: "7R", specialText: "Uphill Limit is 7." },
+        { flat: "9", uphill: "5R", supply: "9Y", downhill: "9Y", breakaway: "9Y" }, { flat: "9", uphill: "5R", supply: "9Y", downhill: "9Y", breakaway: "9Y" }
+    ];
+    const dataPolyvalent = [
+        { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" },
+        { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" },
+        { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "6", uphill: "5", supply: "6Y", downhill: "6R", breakaway: "6R" }, { flat: "6", uphill: "5", supply: "6Y", downhill: "6R", breakaway: "6R" },
+        { flat: "5", uphill: "5", supply: "5R", downhill: "5Y", breakaway: "5" }, { flat: "5", uphill: "5", supply: "5R", downhill: "5Y", breakaway: "5" }, { flat: "5", uphill: "5", supply: "5R", downhill: "5Y", breakaway: "5" },
+        { flat: "9", uphill: "5R", supply: "9", downhill: "9", breakaway: "9Y" }, { flat: "9", uphill: "5R", supply: "9", downhill: "9", breakaway: "9Y" }, { flat: "9", uphill: "5R", supply: "9", downhill: "9", breakaway: "9Y" }
+    ];
+    const dataSquirrel = [
+        { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "7", uphill: "5Y", supply: "7", downhill: "7Y", breakaway: "7R" },
+        { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" },
+        { flat: "4", uphill: "4", supply: "4Y", downhill: "5", breakaway: "4" }, { flat: "4", uphill: "4", supply: "4Y", downhill: "5", breakaway: "4" }, { flat: "4", uphill: "4", supply: "4Y", downhill: "5", breakaway: "4" },
+        { flat: "5", uphill: "5", supply: "5R", downhill: "5R", breakaway: "5" }, { flat: "5", uphill: "5", supply: "5R", downhill: "5R", breakaway: "5" }, { flat: "5", uphill: "5", supply: "5R", downhill: "5R", breakaway: "5" },
+        { flat: "7", uphill: "5Y*", supply: "7", downhill: "7Y", breakaway: "7R" }, { flat: "9", uphill: "5R", supply: "9", downhill: "9Y", breakaway: "9Y" }, { flat: "9", uphill: "5R", supply: "9", downhill: "9Y", breakaway: "9Y" }
+    ];
+    const dataSuperSprinteur = [
+        { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" },
+        { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" },
+        { flat: "4", uphill: "4", supply: "4Y", downhill: "5Y", breakaway: "4" }, { flat: "4", uphill: "4", supply: "4Y", downhill: "5Y", breakaway: "4" }, { flat: "4", uphill: "4", supply: "4Y", downhill: "5Y", breakaway: "4" },
+        { flat: "4", uphill: "4", supply: "4Y", downhill: "5Y", breakaway: "4" }, { flat: "5", uphill: "5", supply: "5R", downhill: "5R", breakaway: "5Y*" }, { flat: "5", uphill: "5", supply: "5R", downhill: "5R", breakaway: "5Y*" },
+        { flat: "9", uphill: "5R", supply: "9", downhill: "9", breakaway: "9Y" }, { flat: "10", uphill: "5R", supply: "10", downhill: "10", breakaway: "10*" }, { flat: "11", uphill: "5R", supply: "11", downhill: "11", breakaway: "11R" }
+    ];
+
+    function createBotCards(roleName, abilityName, baseDataList) {
+        return baseDataList.map(values => ({
+            role: roleName.toUpperCase(), ability: abilityName, values: values, specialText: values.specialText || null
+        }));
+    }
+
+    const botCardDatabase = {
+        'Baroudeur (Rouleur)': {
+            'easy': createBotCards("ROULEUR", "Baroudeur", dataBaroudeur),
+            'medium': createBotCards("ROULEUR", "Baroudeur", [
+                { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" },
+                { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5", specialText: "Don't receive Exhaustion.\nDon't give slipstream." },
+                { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "6", uphill: "6", supply: "6", downhill: "6", breakaway: "6", specialText: "Don't receive Exhaustion.\nDon't give slipstream." },
+                { flat: "6", uphill: "6", supply: "6", downhill: "6", breakaway: "6", specialText: "Don't receive Exhaustion.\nDon't give slipstream." }, { flat: "7", uphill: "6", supply: "6", downhill: "6", breakaway: "7" },
+                { flat: "7", uphill: "6", supply: "7", downhill: "7", breakaway: "7" }, { flat: "7", uphill: "6", supply: "7", downhill: "7", breakaway: "7" },
+                { flat: "8", uphill: "6", supply: "8", downhill: "8", breakaway: "8", specialText: "Don't receive Exhaustion.\nDon't give slipstream." }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }
+            ]),
+            'hard': createBotCards("ROULEUR", "Baroudeur", [
+                { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" },
+                { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5", specialText: "Don't receive Exhaustion.\nDon't give slipstream." },
+                { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "7", uphill: "6", supply: "7", downhill: "7", breakaway: "7", specialText: "Don't receive Exhaustion.\nDon't give slipstream." },
+                { flat: "7", uphill: "6", supply: "7", downhill: "7", breakaway: "7", specialText: "Don't receive Exhaustion.\nDon't give slipstream." }, { flat: "7", uphill: "6", supply: "7", downhill: "7", breakaway: "7" },
+                { flat: "8", uphill: "7", supply: "8", downhill: "8", breakaway: "8" }, { flat: "8", uphill: "7", supply: "8", downhill: "8", breakaway: "8" },
+                { flat: "8", uphill: "7", supply: "9", downhill: "9", breakaway: "9", specialText: "Don't receive Exhaustion.\nDon't give slipstream." }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }
+            ])
         },
-        'botTeams': {
-            title: 'Number of Bot Teams',
-            text: 'Select how many independent Bot teams (2 riders each) you want to manage in this race.'
+        'Domestike (Rouleur)': {
+            'easy': createBotCards("ROULEUR", "Domestike", dataDomestike),
+            'medium': createBotCards("ROULEUR", "Domestike", [
+                { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4", specialText: "Return one recycled\nEnergy Card." }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4", specialText: "Return one recycled\nEnergy Card." }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4", specialText: "Return one recycled\nEnergy Card." },
+                { flat: "5R", uphill: "5Y", supply: "6", downhill: "6", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "6", downhill: "6", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "6", downhill: "6", breakaway: "5" },
+                { flat: "6", uphill: "5", supply: "7", downhill: "7", breakaway: "6" }, { flat: "6", uphill: "5", supply: "7", downhill: "7", breakaway: "6" }, { flat: "7", uphill: "5", supply: "7", downhill: "7", breakaway: "7" },
+                { flat: "7", uphill: "6", supply: "8", downhill: "8", breakaway: "7" }, { flat: "7", uphill: "6", supply: "8", downhill: "8", breakaway: "7" }, { flat: "8", uphill: "6", supply: "8", downhill: "8", breakaway: "8" }
+            ]),
+            'hard': createBotCards("ROULEUR", "Domestike", [
+                { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4", specialText: "Return one recycled\nEnergy Card." }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4", specialText: "Return one recycled\nEnergy Card." }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4", specialText: "Return one recycled\nEnergy Card." },
+                { flat: "5R", uphill: "5Y", supply: "7", downhill: "7", breakaway: "6" }, { flat: "5R", uphill: "5Y", supply: "7", downhill: "7", breakaway: "6" }, { flat: "5R", uphill: "5Y", supply: "7", downhill: "7", breakaway: "6" },
+                { flat: "7", uphill: "6", supply: "8", downhill: "8", breakaway: "7" }, { flat: "7", uphill: "6", supply: "8", downhill: "8", breakaway: "7" }, { flat: "7", uphill: "6", supply: "8", downhill: "8", breakaway: "7" },
+                { flat: "8", uphill: "7", supply: "9", downhill: "9", breakaway: "8" }, { flat: "8", uphill: "7", supply: "9", downhill: "9", breakaway: "8" }, { flat: "8", uphill: "7", supply: "9", downhill: "9", breakaway: "8" }
+            ])
         },
-        'riderInfo': {
-            title: 'How to play this Rider',
-            text: '<p>Click <strong>"Draw Card"</strong> to reveal an Energy Card from the Rider\'s Deck. Then decide, according to the rules, if a second card is needed (Click <strong>"+ 2nd Card?"</strong>). You will now see both cards. Choose and click the first or second card. Move the Rider on the track according to their Movement Points.</p><p>Afterwards, click <strong>"Done"</strong> to close this panel and select the next Rider in turn order. Did this Rider cross the finish line this round? If so, check the <strong>"Race finished?"</strong> box so they are excluded from future rounds.</p>'
+        'Flandrien (Rouleur)': {
+            'easy': createBotCards("ROULEUR", "Flandrien", dataFlandrien),
+            'medium': createBotCards("ROULEUR", "Flandrien", [
+                { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3", specialText: "+1 move extra\nSlipstream if possible" },
+                { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4", specialText: "+1 move extra\nSlipstream if possible" },
+                { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5", specialText: "+1 move extra\nSlipstream if possible" },
+                { flat: "6", uphill: "5", supply: "6", downhill: "7", breakaway: "6" }, { flat: "6", uphill: "5", supply: "6", downhill: "7", breakaway: "6" }, { flat: "7", uphill: "5", supply: "6", downhill: "7", breakaway: "7", specialText: "+1 move extra\nSlipstream if possible" },
+                { flat: "7", uphill: "6", supply: "7", downhill: "8", breakaway: "7" }, { flat: "7", uphill: "6", supply: "7", downhill: "8", breakaway: "7" }, { flat: "8", uphill: "6", supply: "7", downhill: "8", breakaway: "8", specialText: "+1 move extra\nSlipstream if possible" }
+            ]),
+            'hard': createBotCards("ROULEUR", "Flandrien", [
+                { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3", specialText: "+1 move extra\nSlipstream if possible" },
+                { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4", specialText: "+1 move extra\nSlipstream if possible" },
+                { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5", specialText: "+1 move extra\nSlipstream if possible" },
+                { flat: "7", uphill: "6", supply: "7", downhill: "8", breakaway: "7" }, { flat: "7", uphill: "6", supply: "7", downhill: "8", breakaway: "7" }, { flat: "7", uphill: "6", supply: "7", downhill: "8", breakaway: "7", specialText: "+1 move extra\nSlipstream if possible" },
+                { flat: "8", uphill: "7", supply: "8", downhill: "9", breakaway: "8" }, { flat: "8", uphill: "7", supply: "8", downhill: "9", breakaway: "8" }, { flat: "8", uphill: "7", supply: "8", downhill: "9", breakaway: "8", specialText: "+1 move extra\nSlipstream if possible" }
+            ])
         },
-        'exhaustion': {
-            title: 'Exhaustion Management',
-            text: '<p>After playing an Energy Card, a Rider may discard one Exhaustion Card from the game. You can adjust the total number of Exhaustion Cards manually by pressing <strong>(+/-)</strong>.</p><p>Attention: There is no need to manually add Exhaustion Cards for Riders who become exhausted at the end of the movement phase; you will be prompted to distribute those at the very end of the round.</p>'
+        'Grimpeur (Rouleur)': {
+            'easy': createBotCards("ROULEUR", "Grimpeur", dataGrimpeur),
+            'medium': createBotCards("ROULEUR", "Grimpeur", [
+                { flat: "3R", uphill: "3Y", supply: "4", downhill: "7", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "7", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "7", breakaway: "3" },
+                { flat: "4Y", uphill: "4", supply: "4", downhill: "6", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4", downhill: "6", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4", downhill: "6", breakaway: "4" },
+                { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" },
+                { flat: "6", uphill: "7", supply: "6", downhill: "7", breakaway: "6", specialText: "Uphill Limit is 7." }, { flat: "6", uphill: "7", supply: "6", downhill: "7", breakaway: "6", specialText: "Uphill Limit is 7." }, { flat: "6", uphill: "7", supply: "6", downhill: "7", breakaway: "6", specialText: "Uphill Limit is 7." },
+                { flat: "7", uphill: "6", supply: "7", downhill: "8", breakaway: "7" }, { flat: "7", uphill: "6", supply: "7", downhill: "8", breakaway: "7" }, { flat: "8", uphill: "6", supply: "7", downhill: "8", breakaway: "8" }
+            ]),
+            'hard': createBotCards("ROULEUR", "Grimpeur", [
+                { flat: "3R", uphill: "3Y", supply: "4", downhill: "7", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "7", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "7", breakaway: "3" },
+                { flat: "4Y", uphill: "4", supply: "4", downhill: "5Y*", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4", downhill: "5Y*", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4", downhill: "5Y*", breakaway: "4" },
+                { flat: "5R", uphill: "5Y", supply: "5Y", downhill: "5R*", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "5Y", downhill: "5R*", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "5Y", downhill: "5R*", breakaway: "5" },
+                { flat: "6", uphill: "8", supply: "7", downhill: "8", breakaway: "7", specialText: "Uphill Limit is 8." }, { flat: "6", uphill: "8", supply: "7", downhill: "8", breakaway: "7", specialText: "Uphill Limit is 8." }, { flat: "6", uphill: "8", supply: "7", downhill: "8", breakaway: "7", specialText: "Uphill Limit is 8." },
+                { flat: "8", uphill: "7", supply: "8", downhill: "9", breakaway: "8" }, { flat: "8", uphill: "7", supply: "8", downhill: "9", breakaway: "8" }, { flat: "8", uphill: "7", supply: "8", downhill: "9", breakaway: "8" }
+            ])
+        },
+        'Puncheur (Rouleur)': {
+            'easy': createBotCards("ROULEUR", "Puncheur", dataPuncheur),
+            'medium': createBotCards("ROULEUR", "Puncheur", [
+                { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" },
+                { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "7", uphill: "5", supply: "6", downhill: "7", breakaway: "7" },
+                { flat: "7", uphill: "5", supply: "6", downhill: "7", breakaway: "7" }, { flat: "9", uphill: "6", supply: "8", downhill: "8", breakaway: "9", specialText: "Do not retrieve\nan Exhaustion Card this round." }, { flat: "8", uphill: "6", supply: "7", downhill: "8", breakaway: "8" }, { flat: "8", uphill: "6", supply: "7", downhill: "8", breakaway: "8" }, { flat: "8", uphill: "6", supply: "7", downhill: "8", breakaway: "8" }
+            ]),
+            'hard': createBotCards("ROULEUR", "Puncheur", [
+                { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" },
+                { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "7", uphill: "5", supply: "6", downhill: "7", breakaway: "7" },
+                { flat: "7", uphill: "5", supply: "6", downhill: "7", breakaway: "7" }, { flat: "10", uphill: "7", supply: "9", downhill: "9", breakaway: "10", specialText: "Do not retrieve\nan Exhaustion Card this round." }, { flat: "9", uphill: "7", supply: "8", downhill: "9", breakaway: "9" }, { flat: "9", uphill: "7", supply: "8", downhill: "9", breakaway: "9" }, { flat: "9", uphill: "7", supply: "8", downhill: "9", breakaway: "9" }
+            ])
+        },
+        'Super Rouleur (Rouleur)': {
+            'easy': createBotCards("ROULEUR", "Super Rouleur", dataSuperRouleur),
+            'medium': createBotCards("ROULEUR", "Super Rouleur", [
+                { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" },
+                { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "6", uphill: "5", supply: "5", downhill: "6", breakaway: "6", specialText: "Cannot be blocked. Place\non rightmost space." }, { flat: "6", uphill: "5", supply: "5", downhill: "6", breakaway: "6", specialText: "Cannot be blocked. Place\non rightmost space." },
+                { flat: "7", uphill: "5", supply: "6", downhill: "7", breakaway: "7" }, { flat: "7", uphill: "5", supply: "6", downhill: "7", breakaway: "7", specialText: "Cannot be blocked. Place\non rightmost space." }, { flat: "7", uphill: "5", supply: "6", downhill: "7", breakaway: "7", specialText: "Cannot be blocked. Place\non rightmost space." },
+                { flat: "8", uphill: "6", supply: "7", downhill: "8", breakaway: "8" }, { flat: "8", uphill: "6", supply: "7", downhill: "8", breakaway: "8" }, { flat: "8", uphill: "6", supply: "7", downhill: "8", breakaway: "8" }
+            ]),
+            'hard': createBotCards("ROULEUR", "Super Rouleur", [
+                { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3R", uphill: "3Y", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" }, { flat: "4Y", uphill: "4", supply: "4R", downhill: "5", breakaway: "4" },
+                { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "6", uphill: "5", supply: "5", downhill: "6", breakaway: "6", specialText: "Cannot be blocked. Place\non rightmost space." }, { flat: "6", uphill: "5", supply: "5", downhill: "6", breakaway: "6", specialText: "Cannot be blocked. Place\non rightmost space." },
+                { flat: "6", uphill: "5", supply: "6", downhill: "7", breakaway: "6" }, { flat: "8", uphill: "6", supply: "7", downhill: "8", breakaway: "8", specialText: "Cannot be blocked. Place\non rightmost space." }, { flat: "8", uphill: "6", supply: "7", downhill: "8", breakaway: "8", specialText: "Cannot be blocked. Place\non rightmost space." },
+                { flat: "9", uphill: "7", supply: "8", downhill: "9", breakaway: "9" }, { flat: "9", uphill: "7", supply: "8", downhill: "9", breakaway: "9" }, { flat: "9", uphill: "7", supply: "8", downhill: "9", breakaway: "9" }
+            ])
+        },
+        'Descender (Sprinteur)': {
+            'easy': createBotCards("SPRINTEUR", "Descender", dataDescender),
+            'medium': createBotCards("SPRINTEUR", "Descender", [
+                { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" },
+                { flat: "3Y", uphill: "3", supply: "4", downhill: "8", breakaway: "3", specialText: "Return one recycled\nExhaustion Card." }, { flat: "3Y", uphill: "3", supply: "4", downhill: "8", breakaway: "3", specialText: "Return one recycled\nExhaustion Card." }, { flat: "3Y", uphill: "3", supply: "4", downhill: "8", breakaway: "3", specialText: "Return one recycled\nExhaustion Card." },
+                { flat: "4", uphill: "4", supply: "5", downhill: "6", breakaway: "4" }, { flat: "4", uphill: "4", supply: "5", downhill: "6", breakaway: "4" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" },
+                { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5R", uphill: "5Y", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5", uphill: "5", supply: "6", downhill: "6", breakaway: "5" },
+                { flat: "10", uphill: "5", supply: "10", downhill: "10", breakaway: "10" }, { flat: "10", uphill: "5", supply: "10", downhill: "10", breakaway: "10" }, { flat: "10", uphill: "5", supply: "10", downhill: "10", breakaway: "10" }
+            ]),
+            'hard': createBotCards("SPRINTEUR", "Descender", [
+                { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" },
+                { flat: "3Y", uphill: "3", supply: "4", downhill: "9", breakaway: "3", specialText: "Return one recycled\nExhaustion Card." }, { flat: "3Y", uphill: "3", supply: "4", downhill: "9", breakaway: "3", specialText: "Return one recycled\nExhaustion Card." }, { flat: "3Y", uphill: "3", supply: "4", downhill: "9", breakaway: "3", specialText: "Return one recycled\nExhaustion Card." },
+                { flat: "4", uphill: "4", supply: "5", downhill: "6", breakaway: "4" }, { flat: "4", uphill: "4", supply: "5", downhill: "6", breakaway: "4" }, { flat: "6R", uphill: "6Y", supply: "6", downhill: "7", breakaway: "6" },
+                { flat: "6R", uphill: "6Y", supply: "6", downhill: "7", breakaway: "6" }, { flat: "6R", uphill: "6Y", supply: "6", downhill: "7", breakaway: "6" }, { flat: "5", uphill: "5", supply: "7", downhill: "7", breakaway: "6" },
+                { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11" }, { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11" }, { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11" }
+            ])
+        },
+        'Flahute (Sprinteur)': {
+            'easy': createBotCards("SPRINTEUR", "Flahute", dataFlahute),
+            'medium': createBotCards("SPRINTEUR", "Flahute", [
+                { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" },
+                { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" }, { flat: "6R", uphill: "5Y", supply: "6", downhill: "6", breakaway: "6" },
+                { flat: "6R", uphill: "5Y", supply: "6", downhill: "6", breakaway: "6" }, { flat: "6R", uphill: "5Y", supply: "6", downhill: "6", breakaway: "6" }, { flat: "6", uphill: "5", supply: "6", downhill: "6", breakaway: "6", specialText: "Cannot be blocked. Place\non rightmost space." },
+                { flat: "10", uphill: "5", supply: "10", downhill: "10", breakaway: "10" }, { flat: "10", uphill: "5", supply: "10", downhill: "10", breakaway: "10", specialText: "Cannot be blocked. Place\non rightmost space." }, { flat: "10", uphill: "5", supply: "10", downhill: "10", breakaway: "10", specialText: "Cannot be blocked. Place\non rightmost space." }
+            ]),
+            'hard': createBotCards("SPRINTEUR", "Flahute", [
+                { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" },
+                { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" }, { flat: "7R", uphill: "6Y", supply: "7", downhill: "7", breakaway: "7" },
+                { flat: "7R", uphill: "6Y", supply: "7", downhill: "7", breakaway: "7" }, { flat: "7R", uphill: "6Y", supply: "7", downhill: "7", breakaway: "7" }, { flat: "7", uphill: "6", supply: "7", downhill: "7", breakaway: "7", specialText: "Cannot be blocked. Place\non rightmost space." },
+                { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11" }, { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11", specialText: "Cannot be blocked. Place\non rightmost space." }, { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11", specialText: "Cannot be blocked. Place\non rightmost space." }
+            ])
+        },
+        'Mountaineer (Sprinteur)': {
+            'easy': createBotCards("SPRINTEUR", "Mountaineer", dataMountaineer),
+            'medium': createBotCards("SPRINTEUR", "Mountaineer", [
+                { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "5", uphill: "5", supply: "4", downhill: "5", breakaway: "5" }, { flat: "5", uphill: "5", supply: "4", downhill: "5", breakaway: "5" },
+                { flat: "5", uphill: "5", supply: "4", downhill: "5", breakaway: "5" }, { flat: "5", uphill: "5", supply: "4", downhill: "5", breakaway: "5" }, { flat: "6R", uphill: "6Y", supply: "6", downhill: "6", breakaway: "6" },
+                { flat: "6R", uphill: "6Y", supply: "6", downhill: "6", breakaway: "6" }, { flat: "8", uphill: "8", supply: "8", downhill: "8", breakaway: "8", specialText: "Uphill Limit is 8." }, { flat: "8", uphill: "8", supply: "8", downhill: "8", breakaway: "8", specialText: "Uphill Limit is 8." },
+                { flat: "10", uphill: "5", supply: "10", downhill: "10", breakaway: "10" }, { flat: "10", uphill: "5", supply: "10", downhill: "10", breakaway: "10" }
+            ]),
+            'hard': createBotCards("SPRINTEUR", "Mountaineer", [
+                { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "3Y*", uphill: "3Y*", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "3Y*", uphill: "3Y*", supply: "4", downhill: "5", breakaway: "3" }, { flat: "4", uphill: "4", supply: "4", downhill: "5", breakaway: "4" }, { flat: "4", uphill: "4", supply: "4", downhill: "5", breakaway: "4" },
+                { flat: "4", uphill: "4", supply: "4", downhill: "5", breakaway: "4" }, { flat: "4", uphill: "4", supply: "4", downhill: "5", breakaway: "4" }, { flat: "7R", uphill: "7Y", supply: "7", downhill: "7", breakaway: "7" },
+                { flat: "7R", uphill: "7Y", supply: "7", downhill: "7", breakaway: "7" }, { flat: "9", uphill: "9", supply: "9", downhill: "9", breakaway: "9", specialText: "Uphill Limit is 9." }, { flat: "9", uphill: "9", supply: "9", downhill: "9", breakaway: "9", specialText: "Uphill Limit is 9." },
+                { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11" }, { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11" }
+            ])
+        },
+        'Polyvalent (Sprinteur)': {
+            'easy': createBotCards("SPRINTEUR", "Polyvalent", dataPolyvalent),
+            'medium': createBotCards("SPRINTEUR", "Polyvalent", [
+                { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" },
+                { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "7", uphill: "5", supply: "7", downhill: "7", breakaway: "7" }, { flat: "7", uphill: "5", supply: "7", downhill: "7", breakaway: "7" },
+                { flat: "6R", uphill: "6Y", supply: "6", downhill: "6", breakaway: "6" }, { flat: "6R", uphill: "6Y", supply: "6", downhill: "6", breakaway: "6" }, { flat: "6R", uphill: "6Y", supply: "6", downhill: "6", breakaway: "6" },
+                { flat: "10", uphill: "5", supply: "10", downhill: "10", breakaway: "10" }, { flat: "10", uphill: "5", supply: "10", downhill: "10", breakaway: "10" }, { flat: "10", uphill: "5", supply: "10", downhill: "10", breakaway: "10" }
+            ]),
+            'hard': createBotCards("SPRINTEUR", "Polyvalent", [
+                { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" },
+                { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "7", uphill: "5", supply: "7", downhill: "7", breakaway: "7" }, { flat: "7", uphill: "5", supply: "7", downhill: "7", breakaway: "7" },
+                { flat: "7R", uphill: "7Y", supply: "7", downhill: "7", breakaway: "7" }, { flat: "7R", uphill: "7Y", supply: "7", downhill: "7", breakaway: "7" }, { flat: "7R", uphill: "7Y", supply: "7", downhill: "7", breakaway: "7" },
+                { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11" }, { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11" }, { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11" }
+            ])
+        },
+        'Squirrel (Sprinteur)': {
+            'easy': createBotCards("SPRINTEUR", "Squirrel", dataSquirrel),
+            'medium': createBotCards("SPRINTEUR", "Squirrel", [
+                { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "8", uphill: "5", supply: "8", downhill: "8", breakaway: "8" },
+                { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" },
+                { flat: "6R", uphill: "6Y", supply: "6", downhill: "6", breakaway: "6" }, { flat: "6R", uphill: "6Y", supply: "6", downhill: "6", breakaway: "6" }, { flat: "6R", uphill: "6Y", supply: "6", downhill: "6", breakaway: "6" },
+                { flat: "8", uphill: "5", supply: "8", downhill: "8", breakaway: "8" }, { flat: "10", uphill: "5", supply: "10", downhill: "10", breakaway: "10" }, { flat: "10", uphill: "5", supply: "10", downhill: "10", breakaway: "10" }
+            ]),
+            'hard': createBotCards("SPRINTEUR", "Squirrel", [
+                { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "9", uphill: "5", supply: "9", downhill: "9", breakaway: "9" },
+                { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" },
+                { flat: "7R", uphill: "7Y", supply: "7", downhill: "7", breakaway: "7" }, { flat: "7R", uphill: "7Y", supply: "7", downhill: "7", breakaway: "7" }, { flat: "7R", uphill: "7Y", supply: "7", downhill: "7", breakaway: "7" },
+                { flat: "8", uphill: "5", supply: "8", downhill: "8", breakaway: "8" }, { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11" }, { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11" }
+            ])
+        },
+        'Super Sprinteur (Sprinteur)': {
+            'easy': createBotCards("SPRINTEUR", "Super Sprinteur", dataSuperSprinteur),
+            'medium': createBotCards("SPRINTEUR", "Super Sprinteur", [
+                { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" },
+                { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" },
+                { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" }, { flat: "6R", uphill: "6Y", supply: "6", downhill: "6", breakaway: "6" }, { flat: "6R", uphill: "6Y", supply: "6", downhill: "6", breakaway: "6" },
+                { flat: "10", uphill: "5", supply: "10", downhill: "10", breakaway: "10" }, { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11" }, { flat: "12", uphill: "5", supply: "12", downhill: "12", breakaway: "12" }
+            ]),
+            'hard': createBotCards("SPRINTEUR", "Super Sprinteur", [
+                { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" }, { flat: "2R", uphill: "2Y", supply: "4", downhill: "5", breakaway: "2" },
+                { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" }, { flat: "3Y", uphill: "3", supply: "4", downhill: "5", breakaway: "3" },
+                { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" }, { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" },
+                { flat: "5", uphill: "4", supply: "5", downhill: "6", breakaway: "5" }, { flat: "7R", uphill: "7Y", supply: "7", downhill: "7", breakaway: "7" }, { flat: "7R", uphill: "7Y", supply: "7", downhill: "7", breakaway: "7" },
+                { flat: "11", uphill: "5", supply: "11", downhill: "11", breakaway: "11" }, { flat: "12", uphill: "5", supply: "12", downhill: "12", breakaway: "12" }, { flat: "13", uphill: "5", supply: "13", downhill: "13", breakaway: "13" }
+            ])
         }
     };
 
-    const colors = ['White', 'Black', 'Blue', 'Green', 'Pink', 'Red'];
-    let state = { mode: 'single', round: 1, teams: [], breakawayActive: false };
-    let currentTeamIdx = -1;
-    let currentRiderIdx = -1;
+    function getExhCardObj(roleKey) {
+        const isSprinteur = roleKey.includes('Sprinteur');
+        return { isExhaustion: true, role: isSprinteur ? "SPRINTEUR" : "ROULEUR", ability: "Exhaustion", values: { flat: "2R", uphill: "2R", supply: "4", downhill: "5", breakaway: "2" }, specialText: null };
+    }
+
+    const helpTexts = {
+        'raceMode': { title: 'Race Mode', text: 'Choose between Single Race or Grand Tour.' },
+        'difficulty': { title: 'Difficulty', text: 'Select Easy, Medium, or Hard to adjust the deck strengths of the Specialist Bots.' },
+        'botTeams': { title: 'Bot Teams', text: 'Select 1 to 5 teams.' },
+        'riderInfo': { title: 'Rider Actions', text: '<p>Click <strong>"Draw Card"</strong> to reveal an Energy Card from the Rider\'s Deck. Then decide if a second card is needed. Move the Rider on the track according to their Movement Points.</p><p>Afterwards, click <strong>"Done"</strong> to close this panel.</p>' },
+        'exhaustion': { title: 'Exhaustion Management', text: '<p>After playing an Energy Card, a Rider may discard one Exhaustion Card. Adjust the total manually by pressing <strong>(+/-)</strong>.</p>' }
+    };
+
+    let state = { mode: 'single', round: 1, difficulty: 'medium', teams: [], breakawayActive: false, isExtendedStage: false };
+    let currentTeamIdx = -1; let currentRiderIdx = -1;
 
     function toggleAccordion(el) {
         el.classList.toggle("active");
         const icon = el.querySelector('i');
-        if (icon.classList.contains('bi-chevron-down')) {
-            icon.classList.replace('bi-chevron-down', 'bi-chevron-up');
-        } else {
-            icon.classList.replace('bi-chevron-up', 'bi-chevron-down');
-        }
-        
+        icon.classList.toggle('bi-chevron-down'); icon.classList.toggle('bi-chevron-up');
         const content = el.nextElementSibling;
-        if (content.style.maxHeight) {
-            content.style.maxHeight = null;
-            content.classList.remove('active');
-            setTimeout(() => content.style.border = "none", 200);
-        } else {
-            content.style.border = "1px solid #ddd";
-            content.style.borderTop = "none";
-            content.classList.add('active');
-            content.style.maxHeight = content.scrollHeight + "px";
-        }
+        content.classList.toggle('active');
+        content.style.maxHeight = content.classList.contains('active') ? content.scrollHeight + 30 + "px" : "0px";
     }
 
     function shuffle(array) {
@@ -603,29 +647,38 @@
     }
 
     function buildDeck(roleKey) {
-        const deck = [];
-        const roleData = roles[roleKey];
-        if (!roleData) return [];
-        for (let i = 1; i <= roleData.count; i++) {
-            deck.push(`assets/${roleData.prefix}_${i.toString().padStart(2, '0')}.webp`);
-        }
-        return shuffle(deck);
+        const difficulty = state.difficulty || 'medium';
+        const cardDataList = botCardDatabase[roleKey][difficulty];
+        return shuffle(JSON.parse(JSON.stringify(cardDataList)));
     }
 
-    function getExhPath(roleKey) { 
-        const roleData = roles[roleKey];
-        return roleData ? `assets/${roleData.prefix}_exhaustion.webp` : ''; 
-    }
-
-    function save() { localStorage.setItem('frgt_state_v8', JSON.stringify(state)); }
+    function save() { localStorage.setItem('frgt_state_v16', JSON.stringify(state)); }
     function load() {
-        const data = localStorage.getItem('frgt_state_v8');
-        if (data) { 
-            state = JSON.parse(data); 
-            if (state.breakawayActive === undefined) state.breakawayActive = false;
-            return true; 
-        }
+        try {
+            const data = localStorage.getItem('frgt_state_v16');
+            if (data) { 
+                const parsed = JSON.parse(data);
+                if (!parsed.difficulty) parsed.difficulty = 'medium';
+                
+                parsed.teams.forEach(t => t.riders.forEach(r => {
+                    if (!r.breakawayBids) r.breakawayBids = [];
+                    if (!r.breakawayTemp) r.breakawayTemp = [];
+                    if (!r.selectedIndices) r.selectedIndices = [];
+                }));
+                
+                state = parsed; 
+                return true; 
+            }
+        } catch (e) { console.error("Storage error:", e); }
         return false;
+    }
+
+    function showToast(m) { 
+        const t = document.createElement('div'); 
+        t.className = 'toast'; 
+        t.innerText = m; 
+        document.getElementById('toast-container').appendChild(t); 
+        setTimeout(() => t.remove(), 3000); 
     }
 
     function showHelp(key) {
@@ -634,67 +687,81 @@
         document.getElementById('help-text').innerHTML = data.text;
         document.getElementById('help-modal').style.display = 'block';
     }
-
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
+    
     window.closePanel = function() {
         currentTeamIdx = -1;
         currentRiderIdx = -1;
         render();
         window.scrollTo(0, 0);
     };
+    
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-    window.toggleFinished = function(tIdx, rIdx) {
-        const r = state.teams[tIdx].riders[rIdx];
-        r.finished = !r.finished;
-        save();
-        render();
-    };
+    function parseValue(valStr) {
+        let color = '#4CAF50'; let value = valStr; let suffix = '';
+        if (value.endsWith('*')) { value = value.slice(0, -1); suffix = '’'; }
+        if (value.endsWith('R')) { color = '#c62828'; value = value.slice(0, -1); }
+        else if (value.endsWith('Y')) { color = '#FBC02D'; value = value.slice(0, -1); }
+        return { value, color, suffix };
+    }
 
-    window.toggleBreakaway = function() {
-        state.breakawayActive = !state.breakawayActive;
-        save();
-        render();
-    };
-
-    window.doSecondBid = function(tIdx, rIdx) {
-        const r = state.teams[tIdx].riders[rIdx];
-        r.discard.push(r.active[r.selectedIndex]);
-        r.recycle.push(...r.active.filter((_, i) => i !== r.selectedIndex));
-        r.active = [];
-        r.selectedIndex = null;
-        r.didFirstBid = true;
-        save(); 
-        render();
+    window.drawBotCard = function(canvas, cardDataObject) {
+        const ctx = canvas.getContext('2d');
+        let blankoPath;
+        if (cardDataObject.isExhaustion) {
+            blankoPath = 'assets/exhaustion_blanko.webp';
+        } else {
+            const searchKey = Object.keys(roles).find(k => k.toLowerCase().includes(cardDataObject.ability.toLowerCase().substring(0,7)) && k.toUpperCase().includes(cardDataObject.role));
+            blankoPath = `assets/${roles[searchKey].prefix}.webp`;
+        }
+        const img = new Image(); img.src = blankoPath;
+        img.onload = function() {
+            canvas.width = 700; canvas.height = (700 / img.width) * img.height;
+            ctx.drawImage(img, 0, 0, 700, canvas.height);
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#333'; ctx.textAlign = 'center';
+            ctx.font = 'bold 56px Roboto, sans-serif'; ctx.fillText(cardDataObject.role, 350, 80);
+            ctx.font = '36px Roboto, sans-serif';
+            ctx.fillText(cardDataObject.isExhaustion ? "Exhaustion" : "Specialist: " + cardDataObject.ability, 350, 140);
+            if (cardDataObject.specialText) {
+                ctx.fillStyle = '#ffffff'; ctx.beginPath();
+                ctx.moveTo(75, canvas.height - 130); ctx.lineTo(625, canvas.height - 130);
+                ctx.arcTo(650, canvas.height - 130, 650, canvas.height - 80, 20); ctx.arcTo(650, canvas.height - 20, 625, canvas.height - 20, 20);
+                ctx.lineTo(75, canvas.height - 20); ctx.arcTo(50, canvas.height - 20, 50, canvas.height - 80, 20); ctx.arcTo(50, canvas.height - 130, 75, canvas.height - 130, 20);
+                ctx.fill();
+                ctx.font = 'bold 30px Roboto, sans-serif'; ctx.fillStyle = '#333';
+                const lines = cardDataObject.specialText.split('\n');
+                lines.forEach((line, i) => ctx.fillText(line, 350, canvas.height - 90 + (i * 35)));
+            }
+            const categories = [{k:'flat',l:'Flat'},{k:'uphill',l:'Uphill'},{k:'supply',l:'Supply'},{k:'downhill',l:'Downhill'},{k:'breakaway',l:'Breakaway'}];
+            let startY = 320;
+            categories.forEach(cat => {
+                ctx.fillStyle = '#ffffff'; ctx.beginPath();
+                ctx.moveTo(0, startY - 45); ctx.lineTo(310, startY - 45); ctx.arcTo(330, startY - 45, 330, startY, 20); ctx.arcTo(330, startY + 45, 310, startY + 45, 20); ctx.lineTo(0, startY + 45); ctx.fill();
+                ctx.font = 'bold 36px Roboto, sans-serif'; ctx.fillStyle = '#333'; ctx.textAlign = 'left'; ctx.fillText(cat.l, 25, startY);
+                const p = parseValue(cardDataObject.values[cat.k]);
+                ctx.font = 'bold 56px Roboto, sans-serif'; ctx.fillStyle = p.color; 
+                ctx.textAlign = 'right'; 
+                ctx.fillText(`${p.value}${p.suffix}`, 315, startY + 4);
+                startY += 110;
+            });
+        };
     };
 
     function updateSetup() {
-        const count = document.getElementById('teamCount').value;
+        const countStr = document.getElementById('teamCount').value;
         const container = document.getElementById('teams-container');
-        container.innerHTML = '';
-        if(!count) return;
+        container.innerHTML = ''; 
+        if(!countStr) return;
+        const count = parseInt(countStr, 10);
+        if(isNaN(count) || count < 1) return;
 
-        // Separate and sort Rouleurs and Sprinteurs
-        const allRoles = Object.keys(roles);
-        const rouleurs = allRoles.filter(r => r.includes('Rouleur')).sort();
-        const sprinteurs = allRoles.filter(r => r.includes('Sprinteur')).sort();
-        const sortedRoles = [...rouleurs, ...sprinteurs];
-
-        const roleOptions = `<option value="" disabled selected></option>` + 
-                            sortedRoles.map(r => `<option value="${r}">${r}</option>`).join('');
-        const colorOptions = `<option value="" disabled selected></option>` + 
-                             colors.map(c => `<option value="${c}">${c}</option>`).join('');
-
+        const sortedRoles = Object.keys(roles);
+        const roleOptions = `<option value="" disabled selected>Select...</option>` + sortedRoles.map(r => `<option value="${r}">${r}</option>`).join('');
+        const colorOptions = `<option value="" disabled selected>Select...</option>` + colors.map(c => `<option value="${c}">${c}</option>`).join('');
         for (let i = 0; i < count; i++) {
-            const div = document.createElement('div');
-            div.className = 'team-setup';
-            div.innerHTML = `
-                <h3>Team ${i + 1}</h3>
-                <label>Color</label>
-                <select id="color-${i}">${colorOptions}</select>
-                <label>Rider 1</label><select id="r1-${i}">${roleOptions}</select>
-                <label>Rider 2</label><select id="r2-${i}">${roleOptions}</select>
-            `;
+            const div = document.createElement('div'); div.className = 'team-setup';
+            div.innerHTML = `<h3>Team ${i + 1}</h3><label>Color</label><select id="color-${i}">${colorOptions}</select><label>Rider 1</label><select id="r1-${i}">${roleOptions}</select><label>Rider 2</label><select id="r2-${i}">${roleOptions}</select>`;
             container.appendChild(div);
         }
     }
@@ -702,391 +769,467 @@
     function render() {
         document.getElementById('setup-view').classList.add('hidden');
         document.getElementById('dashboard-view').classList.remove('hidden');
-        document.getElementById('round-display').innerText = `Round ${state.round}`;
+        document.getElementById('round-display').innerText = state.breakawayActive ? 'Breakaway Phase' : `Round ${state.round}`;
         
         const modeNames = { 'single': 'Single Race', 'grand_tour': 'Grand Tour' };
-        document.getElementById('mode-display').innerText = modeNames[state.mode] || state.mode;
-
-        const hasDrawnCards = state.teams.some(t => t.riders.some(r => r.active.length > 0 || r.discard.length > 0));
-        const breakawayContainer = document.getElementById('breakaway-toggle-container');
-        if (state.round === 1 && !hasDrawnCards) {
-            breakawayContainer.innerHTML = `
-                <div style="text-align:center; margin-bottom: 15px;">
-                    <label class="checkbox-label" style="justify-content: center; display: inline-flex; background: #fff3e0; padding: 10px 15px; border-radius: 4px; border: 1px solid #ffcc80; font-size: 14px;">
-                        <input type="checkbox" onchange="toggleBreakaway()" ${state.breakawayActive ? 'checked' : ''}> Enable Breakaway Phase (Round 1)
-                    </label>
-                </div>
-            `;
-        } else {
-            breakawayContainer.innerHTML = '';
-        }
-
-        const nav = document.getElementById('rider-nav');
-        nav.innerHTML = '';
+        const currentDiff = state.difficulty || 'medium';
+        document.getElementById('mode-display').innerText = `${modeNames[state.mode]} | Level: ${currentDiff.charAt(0).toUpperCase() + currentDiff.slice(1)}`;
         
-        const colRouleur = document.createElement('div');
-        colRouleur.className = 'nav-column';
-        const colSprinteur = document.createElement('div');
-        colSprinteur.className = 'nav-column';
-
+        if (state.breakawayActive) {
+            document.getElementById('main-instruction').innerText = "Draw 2 consecutive bids for 1 Rider per Team.";
+        } else {
+            document.getElementById('main-instruction').innerText = "Choose Rider to draw their Energy Card(s).";
+        }
+        
+        const nav = document.getElementById('rider-nav'); nav.innerHTML = '';
+        const colRouleur = document.createElement('div'); colRouleur.className = 'nav-column';
+        const colSprinteur = document.createElement('div'); colSprinteur.className = 'nav-column';
         let allReady = true;
 
         state.teams.forEach((t, tIdx) => {
-            const teamHasBreakawayActed = state.breakawayActive ? t.riders.some(rid => rid.active.length > 0 || rid.didFirstBid || rid.finished) : false;
-            
-            if (state.breakawayActive) {
-                const teamReady = t.riders.some(r => (r.active.length > 0 && r.selectedIndex !== null) || r.finished);
-                if (!teamReady) allReady = false;
-            }
+            const teamHasBreakawayActed = state.breakawayActive ? t.riders.some(rid => rid.breakawayBids.length > 0 || rid.active.length > 0 || rid.finished) : false;
+            let teamBreakawayReady = false;
 
             t.riders.forEach((r, rIdx) => {
-                const isReady = (r.active.length > 0 && r.selectedIndex !== null) || r.finished;
+                if (!r.selectedIndices) r.selectedIndices = [];
                 
-                if (!state.breakawayActive && !isReady) {
-                    allReady = false;
-                }
+                const isFullyExhausted = r.draw.length === 0 && r.recycle.length === 0 && r.active.length === 0 && (!state.breakawayActive || r.breakawayBids.length === 0);
+                
+                const isReady = r.finished || isFullyExhausted || (!state.breakawayActive && r.active.length > 0 && r.selectedIndices.length === 1);
+                
+                if (!state.breakawayActive && !isReady) allReady = false;
+                if (state.breakawayActive && (r.finished || isFullyExhausted)) teamBreakawayReady = true;
 
                 const isActive = tIdx === currentTeamIdx && rIdx === currentRiderIdx;
                 const roleType = r.role.includes('Sprinteur') ? 'Sprinteur' : 'Rouleur';
                 const shortRole = r.role.split(' ')[0];
-                
+
                 const btn = document.createElement('button');
                 btn.className = `nav-btn ${isActive ? 'active' : ''}`;
-                btn.style.borderLeft = `8px solid ${t.color === 'White' ? '#ddd' : t.color.toLowerCase()}`;
-                
-                if (r.finished || (state.breakawayActive && teamHasBreakawayActed && r.active.length === 0 && !r.didFirstBid)) {
-                    btn.style.opacity = '0.6';
-                    btn.style.backgroundColor = '#f9f9f9';
-                    btn.style.cursor = 'not-allowed';
-                    btn.disabled = true;
+                btn.style.borderLeft = `8px solid ${t.color.toLowerCase() === 'white' ? '#ddd' : t.color.toLowerCase()}`;
+
+                if (r.finished || isFullyExhausted || (state.breakawayActive && teamHasBreakawayActed && r.breakawayBids.length === 0 && r.active.length === 0)) {
+                    btn.style.opacity = '0.6'; btn.style.backgroundColor = '#f9f9f9'; btn.style.cursor = 'not-allowed'; btn.disabled = true;
                 } else {
                     btn.onclick = () => { currentTeamIdx = tIdx; currentRiderIdx = rIdx; render(); };
                 }
+
+                const exhaustLabel = isFullyExhausted ? ` <span style="color: #d32f2f; font-weight: bold;">Exhausted!</span>` : '';
+                let btnHtml = `<div style="text-align: left; line-height: 1.2; flex-grow: 1;"><span style="font-size: 10px; color: #888;">${t.color} ${roleType}</span><br>${shortRole}${exhaustLabel}</div>`;
                 
-                let btnHtml = `
-                    <div style="text-align: left; line-height: 1.2; flex-grow: 1;">
-                        <span style="font-size: 10px; color: #888;">${t.color} ${roleType}</span><br>
-                        ${shortRole}
-                    </div>
-                `;
-                
-                if (r.finished) {
-                    btnHtml += `<i class="bi bi-flag-fill ready-icon" style="color: #444;"></i>`;
-                } else if (isReady) {
-                    btnHtml += `<i class="bi bi-check-circle-fill ready-icon"></i>`;
-                }
-                
+                if (r.finished || isFullyExhausted) btnHtml += `<i class="bi bi-flag-fill ready-icon" style="color: #444;"></i>`;
+                else if (isReady) btnHtml += `<i class="bi bi-check-circle-fill ready-icon"></i>`;
+
                 btn.innerHTML = btnHtml;
-                
-                if (roleType === 'Rouleur') {
-                    colRouleur.appendChild(btn);
-                } else {
-                    colSprinteur.appendChild(btn);
-                }
+                if (roleType === 'Rouleur') colRouleur.appendChild(btn); else colSprinteur.appendChild(btn);
             });
+            
+            if (state.breakawayActive && !teamBreakawayReady) allReady = false;
         });
 
-        nav.appendChild(colRouleur);
-        nav.appendChild(colSprinteur);
-
+        nav.appendChild(colRouleur); nav.appendChild(colSprinteur);
+        
         const btnNextTurn = document.getElementById('btn-next-turn');
-        btnNextTurn.innerText = `Proceed to Round ${state.round + 1}`;
+        if (state.breakawayActive) {
+            btnNextTurn.innerText = `Resolve Breakaway`;
+            btnNextTurn.onclick = openBreakawayModal;
+        } else {
+            btnNextTurn.innerText = `Proceed to Round ${state.round + 1}`;
+            btnNextTurn.onclick = processNextRound;
+        }
         btnNextTurn.disabled = !allReady;
 
-        const board = document.getElementById('game-board');
-        board.innerHTML = '';
-        
+        const board = document.getElementById('game-board'); board.innerHTML = '';
         if (currentTeamIdx !== -1 && currentRiderIdx !== -1) {
-            const team = state.teams[currentTeamIdx];
-            const r = team.riders[currentRiderIdx];
-            
+            const team = state.teams[currentTeamIdx]; const r = team.riders[currentRiderIdx];
             const roleType = r.role.includes('Sprinteur') ? 'Sprinteur' : 'Rouleur';
             const shortRole = r.role.split(' ')[0];
-            const exhPath = getExhPath(r.role);
-            const exhTotal = [...r.draw, ...r.recycle, ...r.discard, ...r.active].filter(p => p === exhPath).length;
-            const isReady = (r.active.length > 0 && r.selectedIndex !== null) || r.finished;
+            const exhTotal = [...r.draw, ...r.recycle, ...r.discard, ...r.active].filter(p => p.isExhaustion).length;
+            const isReady = (r.active.length > 0 && r.selectedIndices && r.selectedIndices.length === 1) || r.finished;
 
-            const activeHtml = r.active.length > 0 ? r.active.map((path, cIdx) => {
-                const selClass = r.selectedIndex !== null ? (r.selectedIndex === cIdx ? 'selected' : 'unselected') : '';
-                
-                return `
-            <div class="card-wrapper">
-            <img src="${path}" class="card-img ${selClass}" onclick="selectCard(${currentTeamIdx}, ${currentRiderIdx}, ${cIdx})">
-            <div class="card-overlay">Artwork of Flamme Rouge &copy; Lautapelit</div>
-            </div>
-`           ;
-            }).join('') : '<i>Waiting to draw...</i>';
-
-            const tCard = document.createElement('div');
-            tCard.className = 'team-card';
-            tCard.style.borderLeftColor = team.color === 'White' ? '#eee' : team.color.toLowerCase();
+            const activeHtml = r.active.length > 0 ? r.active.map((cardDataObj, cIdx) => {
+                const isSel = r.selectedIndices && r.selectedIndices.includes(cIdx);
+                const selClass = isSel ? 'selected' : 'unselected';
+                const zLayer = isSel ? 10 : cIdx;
+                return `<div class="card-wrapper" style="z-index: ${zLayer};"><canvas id="card-canvas-${currentTeamIdx}-${currentRiderIdx}-${cIdx}" class="bot-card-canvas ${selClass}" onclick="selectCard(${currentTeamIdx}, ${currentRiderIdx}, ${cIdx})"></canvas></div>`;
+            }).join('') : '<i style="color:#666;">Waiting to draw...</i>';
             
-            tCard.innerHTML = `
-                <h3 style="margin:0 0 15px 0; display:flex; align-items:center;">
-                    ${team.color} ${roleType} - ${shortRole} 
-                    <i class="bi bi-info-circle info-icon" style="margin-left:10px; color:#aaa;" onclick="showHelp('riderInfo')"></i>
-                </h3>
+            let hintHtml = '';
+            if (r.active.length > 0 && (!r.selectedIndices || r.selectedIndices.length !== 1)) {
+                hintHtml = '<div style="color: #d32f2f; font-weight: bold; text-align: center; margin-top: -5px; margin-bottom: 15px; font-size: 14px;">Please click on a card to select it!</div>';
+            }
+            
+            let bidStatusHtml = '';
+            if (state.breakawayActive && r.breakawayBids.length > 0) {
+                bidStatusHtml = `<div style="text-align:center; color:#2196F3; font-weight:bold; font-size:14px; margin-bottom: 10px;">
+                    1. Bid locked: Breakaway Value ${r.breakawayBids[0].values.breakaway}
+                </div>`;
+            }
+
+            let bottomActionBtn = '';
+            if (state.breakawayActive) {
+                if (r.breakawayBids.length === 0) {
+                    bottomActionBtn = `<button class="btn-done" onclick="confirmBreakawayBid(${currentTeamIdx}, ${currentRiderIdx})" ${!isReady ? 'disabled' : ''} style="background:var(--highlight-color); color:white; border:none; padding:10px 20px; border-radius:4px; font-weight:bold; margin-left: auto;">Confirm 1st bid</button>`;
+                } else {
+                    bottomActionBtn = `<button class="btn-done" onclick="confirmBreakawayBid(${currentTeamIdx}, ${currentRiderIdx})" ${!isReady ? 'disabled' : ''} style="background:var(--highlight-color); color:white; border:none; padding:10px 20px; border-radius:4px; font-weight:bold; margin-left: auto;">Confirm 2nd bid & Done</button>`;
+                }
+            } else {
+                bottomActionBtn = `<button class="btn-done" onclick="processNormalDone(${currentTeamIdx}, ${currentRiderIdx})" ${!isReady ? 'disabled' : ''} style="background:var(--highlight-color); color:white; border:none; padding:10px 20px; border-radius:4px; font-weight:bold; margin-left: auto;">DONE</button>`;
+            }
+
+            const tCard = document.createElement('div'); tCard.className = 'team-card'; tCard.style.borderLeftColor = team.color.toLowerCase() === 'white' ? '#eee' : team.color.toLowerCase();
+            tCard.innerHTML = `<h3 style="margin:0 0 15px 0; display:flex; align-items:center;">${team.color} ${roleType} - ${shortRole} <i class="bi bi-info-circle info-icon" style="margin-left:10px; color:#aaa;" onclick="showHelp('riderInfo')"></i></h3>
                 <div class="rider">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                        <div class="stats">
-                            Rider's Deck: <b>${r.draw.length}</b> &nbsp;|&nbsp; 
-                            Recycled: <b>${r.recycle.length}</b> &nbsp;|&nbsp; 
-                            <span class="clickable-stat" onclick="showDiscard(${currentTeamIdx}, ${currentRiderIdx})">Discarded: <b>${r.discard.length}</b></span>
-                        </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <div class="stats">Rider's Deck: <b>${r.draw.length}</b> &nbsp;|&nbsp; Recycled: <b>${r.recycle.length}</b> &nbsp;|&nbsp; <span onclick="showDiscard(${currentTeamIdx}, ${currentRiderIdx})" class="clickable-stat">Discarded: <b>${r.discard.length}</b></span></div>
+                    </div>
+                    ${bidStatusHtml}
+                    <div class="draw-controls" style="display: flex; gap: 10px; margin-bottom: 15px; width: 100%;">
+                        <button onclick="draw(${currentTeamIdx}, ${currentRiderIdx})" ${r.active.length > 0 || r.finished ? 'disabled' : ''} style="flex: 1; padding: 12px; font-weight: bold; font-size: 15px;">Draw Card</button>
+                        <button onclick="draw(${currentTeamIdx}, ${currentRiderIdx})" ${r.active.length !== 1 || r.finished ? 'disabled' : ''} style="flex: 1; padding: 12px; font-weight: bold; font-size: 15px;">+ 2nd Card?</button>
                     </div>
                     <div class="card-display">${activeHtml}</div>
-                    
+                    ${hintHtml}
                     <div class="action-area">
                         <div class="action-row-top">
-                            <div class="draw-controls">
-                                <button onclick="draw(${currentTeamIdx}, ${currentRiderIdx})" ${r.active.length > 0 || r.finished ? 'disabled' : ''}>Draw Card</button>
-                                <button onclick="draw(${currentTeamIdx}, ${currentRiderIdx})" ${r.active.length !== 1 || r.finished ? 'disabled' : ''}>+ 2nd Card?</button>
-                                ${state.breakawayActive ? `<button onclick="doSecondBid(${currentTeamIdx}, ${currentRiderIdx})" style="background-color: #FF9800; color: white; border-color: #F57C00;" ${r.active.length > 0 && r.selectedIndex !== null && !r.didFirstBid ? '' : 'disabled'}>Second Bid</button>` : ''}
-                            </div>
-                            <div class="exh-controls">
-                                <span style="font-size:12px; font-weight:bold; color:#c62828; margin-right:5px; display:flex; align-items:center;">
-                                    Exhaustion Cards: ${exhTotal} 
-                                    <i class="bi bi-info-circle info-icon" style="font-size: 14px; margin-left: 6px; color:#ef9a9a;" onclick="showHelp('exhaustion')"></i>
-                                </span>
-                                <button onclick="modExh(${currentTeamIdx}, ${currentRiderIdx}, 1)">+</button>
-                                <button onclick="modExh(${currentTeamIdx}, ${currentRiderIdx}, -1)">-</button>
+                            <div class="exh-controls" style="margin-left: 0; width: 100%; justify-content: space-between; padding: 10px;">
+                                <span style="font-size:13px; font-weight:bold; color:#c62828; display:flex; align-items:center;">Exhaustion Cards: ${exhTotal} <i class="bi bi-info-circle info-icon" style="font-size: 15px; margin-left: 8px; color:#ef9a9a;" onclick="showHelp('exhaustion')"></i></span>
+                                <div><button onclick="modExh(${currentTeamIdx}, ${currentRiderIdx}, 1)" style="padding: 8px 15px;">+</button><button onclick="modExh(${currentTeamIdx}, ${currentRiderIdx}, -1)" style="padding: 8px 15px;">-</button></div>
                             </div>
                         </div>
-                        <div class="action-row-bottom">
-                            <label class="checkbox-label">
-                                <input type="checkbox" onchange="toggleFinished(${currentTeamIdx}, ${currentRiderIdx})" ${r.finished ? 'checked' : ''}> 
-                                Race finished?
-                            </label>
-                            <button class="btn-done" onclick="closePanel()" ${!isReady ? 'disabled' : ''}>DONE</button>
+                        <div class="action-row-bottom" style="margin-top: 5px; width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                            <label class="checkbox-label" style="margin: 0;"><input type="checkbox" onchange="toggleFinished(${currentTeamIdx}, ${currentRiderIdx})" ${r.finished?'checked':''}> Race finished?</label>
+                            ${bottomActionBtn}
                         </div>
                     </div>
-                </div>
-            `;
+                </div>`;
             board.appendChild(tCard);
-        } 
-        else if (allReady && state.teams.length > 0) {
-            const exhPanel = document.createElement('div');
-            exhPanel.className = 'exh-phase-panel';
-            exhPanel.innerHTML = `
-                <h3 style="margin-top:0; color: #e65100; margin-bottom: 5px;">End of Round: Distribute Exhaustion</h3>
-                <p style="font-size: 13px; color: #666; margin-bottom: 20px; margin-top: 0;">Add Exhaustion Cards to the affected Riders before proceeding to the next round. Cards are automatically added to the Recycled pile.</p>
-            `;
-            
-            state.teams.forEach((t, tIdx) => {
-                t.riders.forEach((r, rIdx) => {
-                    const roleType = r.role.includes('Sprinteur') ? 'Sprinteur' : 'Rouleur';
-                    const shortRole = r.role.split(' ')[0];
-                    const exhPath = getExhPath(r.role);
-                    const exhTotal = [...r.draw, ...r.recycle, ...r.discard, ...r.active].filter(p => p === exhPath).length;
-
-                    const row = document.createElement('div');
-                    row.className = 'exh-phase-row';
-                    
-                    if (r.finished) row.style.opacity = '0.5';
-
-                    row.innerHTML = `
-                        <div class="exh-phase-row-label" style="border-left: 6px solid ${t.color === 'White' ? '#ddd' : t.color.toLowerCase()};">
-                            ${t.color} ${roleType} <span style="font-size:11px; font-weight:normal; color:#666; margin-left: 5px;">(${shortRole}) ${r.finished ? ' [Finished]' : ''}</span>
-                        </div>
-                        <div class="exh-controls">
-                            <span style="font-size:12px; font-weight:bold; color:#c62828; margin-right: 5px;">Total EXH: ${exhTotal}</span>
-                            <button onclick="modExh(${tIdx}, ${rIdx}, -1)">-</button>
-                            <button onclick="modExh(${tIdx}, ${rIdx}, 1)">+</button>
-                        </div>
-                    `;
-                    exhPanel.appendChild(row);
+            if (r.active.length > 0) {
+                r.active.forEach((cardDataObj, cIdx) => {
+                    setTimeout(() => { const canvas = document.getElementById(`card-canvas-${currentTeamIdx}-${currentRiderIdx}-${cIdx}`); if (canvas) drawBotCard(canvas, cardDataObj); }, 0);
                 });
-            });
+            }
+        } else if (allReady && state.teams.length > 0 && !state.breakawayActive) {
+            const panel = document.createElement('div'); panel.className = 'exh-phase-panel';
+            panel.innerHTML = `<h3 style="margin-top:0; color: #e65100; margin-bottom: 5px;">Round End: Distribute Exhaustion</h3>
+                <p style="font-size: 13px; color: #666; margin-bottom: 20px; margin-top: 0;">Add Exhaustion Cards to the affected Riders before proceeding to the next round.</p>`;
+            state.teams.forEach((t, ti) => t.riders.forEach((r, ri) => {
+                const roleType = r.role.includes('Sprinteur') ? 'Sprinteur' : 'Rouleur';
+                const shortRole = r.role.split(' ')[0];
+                const exhTotal = [...r.draw, ...r.recycle, ...r.discard, ...r.active].filter(p => p.isExhaustion).length;
+                const row = document.createElement('div'); row.className = 'exh-phase-row';
+                if (r.finished) row.style.opacity = '0.5';
+                row.innerHTML = `<div style="border-left:6px solid ${t.color.toLowerCase() === 'white' ? '#ddd' : t.color.toLowerCase()}; padding-left:10px; font-weight:bold;">${t.color} ${roleType} <span style="font-size:11px; font-weight:normal; color:#666; margin-left: 5px;">(${shortRole}) ${r.finished ? ' [Finished]' : ''}</span></div><div class="exh-controls"><span style="font-size:12px; font-weight:bold; color:#c62828; margin-right: 5px;">Total EXH: ${exhTotal}</span><button onclick="modExh(${ti}, ${ri}, -1)">-</button><button onclick="modExh(${ti}, ${ri}, 1)">+</button></div>`;
+                panel.appendChild(row);
+            }));
             
-            // SHUFFLE CHECKBOX ADDED HERE
-            const shuffleContainer = document.createElement('div');
-            shuffleContainer.style.marginTop = "20px";
-            shuffleContainer.style.paddingTop = "15px";
-            shuffleContainer.style.borderTop = "0px solid #eee";
-            shuffleContainer.innerHTML = `
-                <label class="checkbox-label" style="justify-content: center; background: #fafafa; padding: 10px; border-radius: 4px; border: 1px solid #ddd;">
-                    <input type="checkbox" id="force-shuffle"> Force shuffling of Riders Cards
-                </label>
-            `;
-            exhPanel.appendChild(shuffleContainer);
-            
-            board.appendChild(exhPanel);
+            const optionalContainer = document.createElement('div');
+            optionalContainer.style.marginTop = "20px";
+            optionalContainer.style.paddingTop = "15px";
+            optionalContainer.style.borderTop = "1px solid #ddd";
+            optionalContainer.style.display = "flex";
+            optionalContainer.style.flexDirection = "column";
+            optionalContainer.style.gap = "10px";
+
+            let optionalHtml = `<div style="font-weight: bold; color: #555;">Optional selection:</div>`;
+            optionalHtml += `<label style="display: flex; align-items: center; justify-content: center; background: #f5f5f5; padding: 12px; border-radius: 4px; border: 1px solid #e0e0e0; font-weight: normal; cursor: pointer; margin: 0;"><input type="checkbox" id="force-shuffle" style="margin-right: 10px; transform: scale(1.2);"> Force shuffling of Riders Cards</label>`;
+
+            if (state.isExtendedStage) {
+                optionalHtml += `<label style="display: flex; align-items: center; justify-content: center; background: #f5f5f5; padding: 12px; border-radius: 4px; border: 1px solid #e0e0e0; font-weight: normal; cursor: pointer; margin: 0;"><input type="checkbox" id="force-refresh" style="margin-right: 10px; transform: scale(1.2);"> Refresh Phase: Retrieve some Energy Cards</label>`;
+            }
+            optionalContainer.innerHTML = optionalHtml;
+            panel.appendChild(optionalContainer);
+            board.appendChild(panel);
         }
     }
 
-    window.draw = function(tIdx, rIdx) {
-        const r = state.teams[tIdx].riders[rIdx];
-        if (r.draw.length === 0) {
-            if (r.recycle.length === 0) {
-                showToast("Rider's Deck is completely empty!");
-                return;
+    window.draw = function(t, r) {
+        const rid = state.teams[t].riders[r];
+        if (rid.draw.length === 0) { 
+            if (rid.recycle.length === 0) {
+                showToast(`${state.teams[t].color} Rider's Deck is completely empty!`);
+                return; 
             }
-            r.draw = shuffle([...r.recycle]);
-            r.recycle = [];
-            showToast(`${state.teams[tIdx].color} Rider: Deck reshuffled from Recycled pile.`);
+            rid.draw = shuffle([...rid.recycle]); 
+            rid.recycle = []; 
+            showToast(`${state.teams[t].color} ${rid.role.split(' ')[0]}: Deck reshuffled from Recycled pile.`);
         }
-        r.active.push(r.draw.shift());
-        r.selectedIndex = r.active.length === 1 ? 0 : null;
+        rid.active.push(rid.draw.shift()); 
+        
+        if (!rid.selectedIndices) rid.selectedIndices = [];
+        rid.selectedIndices = [rid.active.length - 1];
+        
         save(); render();
     };
 
-    window.selectCard = function(tIdx, rIdx, cIdx) {
-        state.teams[tIdx].riders[rIdx].selectedIndex = cIdx;
+    window.selectCard = function(t, r, i) { 
+        const rid = state.teams[t].riders[r];
+        rid.selectedIndices = [i];
+        save(); render(); 
+    };
+
+    window.processNormalDone = function(tIdx, rIdx) {
+        closePanel();
+    };
+
+    window.confirmBreakawayBid = function(tIdx, rIdx) {
+        const rid = state.teams[tIdx].riders[rIdx];
+        if (!rid.selectedIndices || rid.selectedIndices.length !== 1) return;
+        
+        const selIdx = rid.selectedIndices[0];
+        rid.breakawayBids.push(rid.active[selIdx]);
+        
+        rid.active.forEach((c, i) => { 
+            if (i !== selIdx) rid.breakawayTemp.push(c); 
+        });
+        
+        rid.active = []; rid.selectedIndices = [];
+        
+        if (rid.breakawayBids.length === 2) {
+            rid.finished = true;
+            currentTeamIdx = -1; currentRiderIdx = -1;
+        }
         save(); render();
     };
 
-    window.modExh = function(tIdx, rIdx, amount) {
-        const r = state.teams[tIdx].riders[rIdx];
-        const path = getExhPath(r.role);
-        if (amount > 0) r.recycle.push(path);
-        else {
-            const piles = [r.recycle, r.discard, r.draw, r.active];
-            for (let p of piles) {
-                const idx = p.lastIndexOf(path);
-                if (idx !== -1) { p.splice(idx, 1); break; }
+    window.openBreakawayModal = function() {
+        let results = [];
+        state.teams.forEach((t, tIdx) => {
+            t.riders.forEach(r => {
+                if (r.breakawayBids && r.breakawayBids.length === 2) {
+                    const b1 = parseInt(r.breakawayBids[0].values.breakaway.replace(/[^0-9]/g, '')) || 0;
+                    const b2 = parseInt(r.breakawayBids[1].values.breakaway.replace(/[^0-9]/g, '')) || 0;
+                    results.push({
+                        tIdx: tIdx,
+                        color: t.color,
+                        role: r.role.split(' ')[0],
+                        sum: b1 + b2,
+                        valStr: `${r.breakawayBids[0].values.breakaway} + ${r.breakawayBids[1].values.breakaway}`
+                    });
+                }
+            });
+        });
+        
+        results.sort((a, b) => b.sum - a.sum);
+
+        let html = '';
+        if (results.length === 0) {
+            html = '<p style="color:#666; text-align:center;">No breakaway bids placed.</p>';
+        } else {
+            results.forEach((res, idx) => {
+                html += `<label class="breakaway-row">
+                    <div style="display:flex; align-items:center;">
+                        <input type="checkbox" class="breakaway-cb" value="${res.tIdx}" onchange="checkMaxBreakaway(this)">
+                        <div>
+                            <div style="font-weight:bold; font-size:16px;">${idx + 1}. ${res.color} ${res.role}</div>
+                            <div style="font-size:12px; color:#666;">Cards: ${res.valStr}</div>
+                        </div>
+                    </div>
+                    <div style="font-weight:bold; font-size:18px; color:#d32f2f;">${res.sum}</div>
+                </label>`;
+            });
+        }
+        document.getElementById('breakaway-list').innerHTML = html;
+        document.getElementById('breakaway-modal').style.display = 'block';
+    };
+
+    window.checkMaxBreakaway = function(el) {
+        const checked = document.querySelectorAll('.breakaway-cb:checked');
+        if (checked.length > 2) el.checked = false;
+    };
+
+    window.finalizeBreakaway = function() {
+        const winners = Array.from(document.querySelectorAll('.breakaway-cb:checked')).map(cb => parseInt(cb.value));
+        if (winners.length === 0 && document.querySelectorAll('.breakaway-cb').length > 0) {
+            if (!confirm("Are you sure no rider breaks away?")) return;
+        }
+
+        state.teams.forEach((t, tIdx) => {
+            t.riders.forEach(r => {
+                if (r.breakawayBids && r.breakawayBids.length > 0) {
+                    if (winners.includes(tIdx)) {
+                        r.discard.push(...r.breakawayBids);
+                    } else {
+                        r.recycle.push(...r.breakawayBids);
+                    }
+                    if (r.breakawayTemp) r.recycle.push(...r.breakawayTemp);
+                }
+                r.breakawayBids = [];
+                r.breakawayTemp = [];
+                r.finished = false;
+            });
+        });
+
+        state.breakawayActive = false;
+        closeModal('breakaway-modal');
+        save(); render();
+    };
+
+    window.processNextRound = function() {
+        const forceShuffleCheckbox = document.getElementById('force-shuffle');
+        const isForceShuffle = forceShuffleCheckbox && forceShuffleCheckbox.checked;
+
+        const forceRefreshCheckbox = document.getElementById('force-refresh');
+        const isForceRefresh = forceRefreshCheckbox && forceRefreshCheckbox.checked;
+
+        if (isForceRefresh) {
+            state.teams.forEach(t => t.riders.forEach(r => {
+                const amountToRetrieve = Math.floor(r.discard.length / 2);
+                if (amountToRetrieve > 0) {
+                    r.discard = shuffle(r.discard);
+                    const retrieved = r.discard.splice(0, amountToRetrieve);
+                    r.draw = shuffle([...r.draw, ...retrieved]);
+                }
+            }));
+            showToast("Refresh Phase: Energy cards retrieved and shuffled into draw decks.");
+        }
+
+        state.teams.forEach(t => t.riders.forEach(r => {
+            if (r.active.length > 0) { 
+                const selIdx = (r.selectedIndices && r.selectedIndices.length > 0) ? r.selectedIndices[0] : 0;
+                r.discard.push(r.active[selIdx]);
+                r.active.forEach((c, i) => { if (i !== selIdx) r.recycle.push(c); });
+                r.active = []; r.selectedIndices = []; 
             }
+            if (isForceShuffle) { r.draw = shuffle([...r.draw, ...r.recycle]); r.recycle = []; }
+        }));
+        
+        if (isForceShuffle) {
+            setTimeout(() => showToast("All Riders: Decks combined and reshuffled."), isForceRefresh ? 3500 : 0);
+        }
+
+        state.round++; currentTeamIdx = -1; currentRiderIdx = -1; window.scrollTo(0, 0); save(); render();
+    };
+
+    window.modExh = function(t, r, a) {
+        const rid = state.teams[t].riders[r];
+        if (a > 0) {
+            rid.recycle.push(getExhCardObj(rid.role));
+        } else { 
+            const p = [rid.recycle, rid.discard, rid.draw, rid.active]; 
+            for (let s of p) { 
+                let idx = -1;
+                for (let i = s.length - 1; i >= 0; i--) {
+                    if (s[i].isExhaustion) { idx = i; break; }
+                }
+                if (idx !== -1) { s.splice(idx, 1); break; }
+            } 
         }
         save(); render();
     };
-
-    window.showDiscard = function(tIdx, rIdx) {
-        const r = state.teams[tIdx].riders[rIdx];
-        const list = document.getElementById('modal-list');
-        document.getElementById('modal-title').innerText = `Discarded: ${r.role}`;
-        list.innerHTML = r.discard.map(p => `
-    <div class="card-wrapper" style="margin-bottom: 10px;">
-        <img src="${p}" style="width:200px; border-radius:8px; display: block; margin: 0 auto;">
-        <div class="card-overlay" style="font-size: 8px; bottom: 6px;">Artwork of Flamme Rouge &copy; Lautapelit</div>
-    </div>
-`).join('') || '<p style="color:#666;">No cards played yet.</p>';
+    
+    window.toggleFinished = function(t, r) { state.teams[t].riders[r].finished = !state.teams[t].riders[r].finished; save(); render(); };
+    
+    window.showDiscard = function(t, r) {
+        const rid = state.teams[t].riders[r]; document.getElementById('modal-list').innerHTML = rid.discard.map((c, i) => `<canvas id="m-${i}" style="width:100%; border-radius:8px; margin-bottom:10px"></canvas>`).join('') || '<p style="color:#666;">No cards played yet.</p>';
         document.getElementById('discard-modal').style.display = 'block';
+        rid.discard.forEach((c, i) => setTimeout(() => drawBotCard(document.getElementById(`m-${i}`), c), 0));
     };
 
     document.getElementById('btn-start').onclick = () => {
         const errDiv = document.getElementById('setup-error');
-        errDiv.innerText = ''; 
+        errDiv.innerText = '';
         
         const m = document.getElementById('raceMode').value;
         const countStr = document.getElementById('teamCount').value;
         
-        if(!m || !countStr) {
-            errDiv.innerText = "Error: Please select Race Mode and Number of Bot Teams.";
-            return;
-        }
+        if(!m || !countStr) { errDiv.innerText = "Error: Please select Race Mode and Number of Bot Teams."; return; }
 
         const count = parseInt(countStr, 10);
         const selectedColors = new Set();
-
+        
         for (let i = 0; i < count; i++) {
             const c = document.getElementById(`color-${i}`).value;
             const r1 = document.getElementById(`r1-${i}`).value;
             const r2 = document.getElementById(`r2-${i}`).value;
             
-            if(!c || !r1 || !r2) {
-                errDiv.innerText = `Error in Team ${i+1}: Please complete all selections (Color and both Riders).`;
-                return;
-            }
-            
-            if (selectedColors.has(c)) {
-                errDiv.innerText = `Error: The color '${c}' is selected multiple times. Each team must have a unique color.`;
-                return;
-            }
+            if(!c || !r1 || !r2) { errDiv.innerText = `Error in Team ${i+1}: Please complete all selections (Color and both Riders).`; return; }
+            if (selectedColors.has(c)) { errDiv.innerText = `Error: The color '${c}' is selected multiple times. Each team must have a unique color.`; return; }
             selectedColors.add(c);
-
-            if (r1.includes('Sprinteur') === r2.includes('Sprinteur')) {
-                errDiv.innerText = `Error in Team ${i+1}: You must select exactly 1 Sprinteur and 1 Rouleur.`;
-                return;
-            }
+            if (r1.includes('Sprinteur') === r2.includes('Sprinteur')) { errDiv.innerText = `Error in Team ${i+1}: You must select exactly 1 Sprinteur and 1 Rouleur.`; return; }
         }
         
-        state.mode = m;
-        state.round = 1; 
-        state.teams = [];
-        state.breakawayActive = false;
+        const diffSlider = document.getElementById('difficultySlider');
+        const diffVal = diffSlider ? parseInt(diffSlider.value, 10) : 1;
+        const levels = ['easy', 'medium', 'hard'];
+        state.difficulty = levels[diffVal] || 'medium';
+        
+        state.mode = m; state.round = 1; state.teams = []; state.isExtendedStage = false;
+        
+        const baCheckbox = document.getElementById('enableBreakawaySetup');
+        state.breakawayActive = baCheckbox ? baCheckbox.checked : false;
         
         for (let i = 0; i < count; i++) {
             const r1 = document.getElementById(`r1-${i}`).value;
             const r2 = document.getElementById(`r2-${i}`).value;
             state.teams.push({ color: document.getElementById(`color-${i}`).value, riders: [
-                { role: r1, draw: buildDeck(r1), recycle: [], discard: [], active: [], selectedIndex: null, finished: false, didFirstBid: false },
-                { role: r2, draw: buildDeck(r2), recycle: [], discard: [], active: [], selectedIndex: null, finished: false, didFirstBid: false }
+                { role: r1, draw: buildDeck(r1), recycle: [], discard: [], active: [], breakawayBids: [], breakawayTemp: [], selectedIndices: [], finished: false },
+                { role: r2, draw: buildDeck(r2), recycle: [], discard: [], active: [], breakawayBids: [], breakawayTemp: [], selectedIndices: [], finished: false }
             ]});
         }
-        currentTeamIdx = -1;
-        currentRiderIdx = -1;
-        window.scrollTo(0, 0);
-        save(); render();
+        currentTeamIdx = -1; currentRiderIdx = -1; window.scrollTo(0, 0); save(); render();
     };
 
-    document.getElementById('btn-next-turn').onclick = () => {
-        // CHECK SHUFFLE STATE
-        const forceShuffleCheckbox = document.getElementById('force-shuffle');
-        const isForceShuffle = forceShuffleCheckbox && forceShuffleCheckbox.checked;
-
-        state.teams.forEach(t => t.riders.forEach(r => {
-            if (r.active.length > 0) {
-                r.discard.push(r.active[r.selectedIndex]);
-                r.recycle.push(...r.active.filter((_, i) => i !== r.selectedIndex));
-                r.active = []; r.selectedIndex = null;
-            }
-            
-            // EXECUTE FORCE SHUFFLE
-            if (isForceShuffle) {
-                r.draw = shuffle([...r.draw, ...r.recycle]);
-                r.recycle = [];
-            }
-            
-            r.didFirstBid = false;
-        }));
-        
-        if (isForceShuffle) {
-            showToast("All Riders: Decks combined and reshuffled.");
-        }
-        
-        state.round++; 
-        state.breakawayActive = false;
-        currentTeamIdx = -1;
-        currentRiderIdx = -1;
-        window.scrollTo(0, 0);
-        save(); render();
-    };
+    window.toggleBreakaway = function() { state.breakawayActive = !state.breakawayActive; save(); render(); };
+    window.toggleExtendedStage = function() { state.isExtendedStage = !state.isExtendedStage; save(); render(); };
 
     document.getElementById('btn-end-stage').onclick = () => {
-        if(!confirm("End stage and reshuffle?")) return;
-        state.round = 1;
-        state.breakawayActive = false;
+        if (!confirm("End Stage?")) return;
+        const diff = state.difficulty || 'medium';
         state.teams.forEach(t => t.riders.forEach(r => {
             let kept = [];
             if (state.mode === 'grand_tour') {
-                const path = getExhPath(r.role);
-                const count = [...r.draw, ...r.recycle, ...r.discard, ...r.active].filter(p => p === path).length;
-                kept = Array(Math.floor(count / 2)).fill(path);
+                const count = [...r.draw, ...r.recycle, ...r.discard, ...r.active].filter(p => p.isExhaustion).length;
+                kept = Array(Math.floor(count / 2)).fill(null).map(() => getExhCardObj(r.role));
             }
-            r.draw = shuffle([...buildDeck(r.role), ...kept]);
-            r.recycle = []; r.discard = []; r.active = []; r.selectedIndex = null; r.finished = false; r.didFirstBid = false;
+            r.draw = shuffle([...botCardDatabase[r.role][diff], ...kept]);
+            r.recycle = []; r.discard = []; r.active = []; r.breakawayBids = []; r.breakawayTemp = []; r.selectedIndices = []; r.finished = false;
         }));
-        currentTeamIdx = -1;
-        currentRiderIdx = -1;
-        window.scrollTo(0, 0);
-        save(); render();
+        state.round = 1; state.breakawayActive = false; state.isExtendedStage = false; currentTeamIdx = -1; currentRiderIdx = -1; window.scrollTo(0, 0); save(); render();
     };
 
-    document.getElementById('btn-reset').onclick = () => { if(confirm("Reset all?")) { localStorage.removeItem('frgt_state_v8'); location.reload(); }};
-    function showToast(m) { const t = document.createElement('div'); t.className = 'toast'; t.innerText = m; document.getElementById('toast-container').appendChild(t); setTimeout(() => t.remove(), 3000); }
-    
+    document.getElementById('btn-reset').onclick = () => { if (confirm("Reset?")) { localStorage.removeItem('frgt_state_v16'); location.reload(); } };
     document.getElementById('teamCount').addEventListener('change', updateSetup);
     
-    window.onclick = (e) => { 
-        if (e.target.classList.contains('modal')) {
-            closeModal(e.target.id); 
+    if (load()) document.getElementById('btn-resume').classList.remove('hidden');
+    document.getElementById('btn-resume').onclick = render;
+    
+    updateSetup();
+
+    const originalRender = render;
+    render = function() {
+        originalRender();
+        const roundOneOptionsContainer = document.getElementById('round-one-options-container');
+        const mainInstruction = document.getElementById('main-instruction');
+        const hasDrawnCards = state.teams.some(t => t.riders.some(r => r.active.length > 0 || r.discard.length > 0 || r.breakawayBids.length > 0));
+        
+        if (state.round === 1 && !hasDrawnCards) {
+            if (mainInstruction) mainInstruction.style.display = 'none';
+            
+            roundOneOptionsContainer.innerHTML = `
+                <div style="margin-bottom: 25px; padding: 0 10px;">
+                    <div style="font-weight: bold; color: #555; margin-bottom: 12px; font-size: 15px;">
+                        Before you start the first round, please choose:
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label style="display: flex; align-items: center; cursor: pointer; font-size: 14px; color: #333; margin: 0;">
+                            <input type="checkbox" onchange="toggleExtendedStage()" ${state.isExtendedStage ? 'checked' : ''} style="margin-right: 12px; transform: scale(1.2);">
+                            This is an extended stage with refresh phase.
+                        </label>
+                    </div>
+                    <div>
+                        <label style="display: flex; align-items: center; cursor: pointer; font-size: 14px; color: #333; margin: 0;">
+                            <input type="checkbox" onchange="toggleBreakaway()" ${state.breakawayActive ? 'checked' : ''} style="margin-right: 12px; transform: scale(1.2);">
+                            I will run a breakaway phase.
+                        </label>
+                    </div>
+                </div>
+            `;
+        } else {
+            if (mainInstruction) mainInstruction.style.display = 'block';
+            roundOneOptionsContainer.innerHTML = '';
         }
     };
-    
-    if (load()) {
-        document.getElementById('btn-resume').classList.remove('hidden');
-    }
-    document.getElementById('btn-resume').onclick = render;
-    updateSetup();
 </script>
 </body>
 </html>
