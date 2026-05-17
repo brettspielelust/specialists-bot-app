@@ -91,16 +91,9 @@
             text-decoration: underline;
         }
 
-        .header-image {
-            width: calc(100% + 40px);
-            max-width: none;
-            height: auto;
-            max-height: 200px;
-            display: block;
-            margin: -20px -20px 20px -20px;
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
-            object-fit: cover;
-        }
+.header-image { width: 100%; height: auto; max-height: 200px; display: block; margin: 0 0 20px 0; object-fit: cover; border-radius: 4px; }
+
+       
 
         #rules-view {
             background: white;
@@ -147,7 +140,7 @@
         
         <h4>Example:</h4>
         <figure style="margin: 20px 0;">
-        <img src="/specialist-bots/assets/baroudeur-green.webp" width="100%">
+        <img src="/specialist-bots/assets/baroudeur-green1.webp" width="50%">
         </figcaption>
         </figure>
         
@@ -172,13 +165,13 @@
         
         <h4>Example:</h4>
         <figure style="margin: 20px 0;">
-        <img src="/specialist-bots/assets/squirrel-green-uphill.webp" width="100%">
+        <img src="/specialist-bots/assets/baroudeur-uphill.webp" width="50%">
         </figure>
         
         <figure style="margin: 20px 0;">
         <img src="/specialist-bots/assets/uphill-example.webp" width="100%">
         <figcaption style="font-style: italic; margin-top: 8px; color: #555;">
-        Rider starts on flat terrain but with green number 9 they would enter the uphill field: Consider uphill number (5) instead. While this 5 is red, they would have to draw second card.
+        Rider starts on flat terrain but with green number 7 they would enter the uphill field: Consider uphill number (5) instead. While this 5 is red, they would have to draw second card.
         </figcaption>
         </figure>
 
@@ -194,16 +187,18 @@
         </ul>
         
         <h4>Example:</h4>
-        <figure style="margin: 20px 0;">
-        <img src="/specialist-bots/assets/superrouleur-red.webp" width="100%">
-        </figure>
-        
-        <figure style="margin: 20px 0;">
-        <img src="/specialist-bots/assets/superrouleur-yellow.webp" width="100%">
+<div style="display: flex; gap: 20px; margin: 20px 0; align-items: flex-start;">
+    <figure style="margin: 0; flex: 1;">
+        <img src="/specialist-bots/assets/baroudeur-yellow.webp" style="width: 100%; height: auto;">
         <figcaption style="font-style: italic; margin-top: 8px; color: #555;">
-        First card is a red 3, second card is a yellow 4. Yellow is preferred over red, so use 4 movement points in this round. 
+            First card is a yellow 4, second card is a green 5. Green is preferred over yellow this round.
         </figcaption>
-        </figure>
+    </figure>
+
+    <figure style="margin: 0; flex: 1;">
+        <img src="/specialist-bots/assets/baroudeur-green2.webp" style="width: 100%; height: auto;">
+    </figure>
+</div>
         
         
         <p>
