@@ -1,0 +1,23 @@
+{
+  "name": "Flamme Rouge Grand Tour Bots",
+  "short_name": "FRGT Bots",
+  "description": "Unofficial Flamme Rouge App for Specialist Bots.",
+  "start_url": "./index4.html",
+  "display": "standalone",
+  "background_color": "#f4f4f9",
+  "theme_color": "#4CAF50",
+  "icons": [
+    {
+      "src": "assets/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
